@@ -1,26 +1,201 @@
+/* ==========================================================================
+   1. TAILWIND IMPORT
+   Pulls in all of Tailwind's core utility classes (flex, p-4, rounded-lg...).
+   Always goes at the very top. Don't touch this line.
+   ========================================================================== */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   2. :root — RAW COLOR VALUES (light mode / default)
+   These are plain CSS variables. Just named hex values, nothing
+   Tailwind-specific yet. Think of this as your "paint bucket" —
+   the actual colors that exist, before you register them as classes.
+   ========================================================================== */
+
+html {
+  scroll-behavior: smooth;
 }
 
+* {
+  box-sizing: border-box;
+}
+:root {
+  /* --- base surfaces ---
+     The "neutral" colors every page needs, regardless of brand.
+     These control the overall page look: light gray page, white cards,
+     near-black text, light gray borders.
+  */
+  --background: #f9fafb; /* page background — used as: bg-background */
+  --foreground: #171717; /* main body text color — used as: text-foreground */
+  --card: #ffffff; /* background of cards/panels — slightly whiter than page bg, gives depth */
+  --card-foreground: #171717; /* text color inside cards */
+  --border: #e5e7eb; /* dividers, outlines, table borders — used as: border-border */
+  --input: #e5e7eb; /* border color specifically for form inputs */
+  --ring: #367e96; /* the outline that appears when you Tab/focus an element (accessibility) */
+
+  /* --- brand scale ---
+     A full range of your ONE brand color, from very light (50) to
+     very dark (950). You generate this from a single hex using a tool
+     like uicolors.app — never hand-pick each shade yourself.
+     WHY: a single brand color isn't enough. You need lighter versions
+     for hover states/subtle backgrounds, and darker versions for text
+     that needs more contrast.
+  */
+  --brand-50: #eff6f8; /* barely-there tint — good for very subtle backgrounds */
+  --brand-100: #dcebf0; /* light tint — badge/tag backgrounds */
+  --brand-200: #b8d7e1;
+  --brand-300: #8fc0d0;
+  --brand-400: #5fa0b8; /* mid-light — often used for dark mode primary */
+  --brand-500: #3f87a2;
+  --brand-600: #367e96; /* ← YOUR ORIGINAL COLOR — the "main" one you picked */
+  --brand-700: #2c6578; /* darker — use for brand-colored text (better contrast on light bg) */
+  --brand-800: #234f5f;
+  --brand-900: #1b3d49; /* very dark — good for dark-mode accent backgrounds */
+  --brand-950: #112530; /* darkest — rarely used, extreme contrast situations */
+
+  /* --- semantic colors ---
+     This is the IMPORTANT layer. Instead of using "brand-600" directly
+     in your components, you point generic, purpose-based names
+     (primary, secondary, accent...) AT specific brand shades.
+
+     WHY THIS INDIRECTION MATTERS:
+     If you decide your brand color should be a shade darker next month,
+     you only change it HERE (one line) instead of hunting through every
+     component that used "brand-600" directly. Your components say
+     "give me the primary color" — they don't care which literal shade
+     that resolves to.
+  */
+  --primary: var(
+    --brand-600
+  ); /* main action color — primary buttons, active links */
+  --primary-foreground: #ffffff; /* text color that sits ON TOP of primary (white text on your teal button) */
+
+  --secondary: #f3f4f6; /* secondary buttons — lower visual priority than primary */
+  --secondary-foreground: #171717; /* text on secondary elements */
+
+  --accent: var(
+    --brand-100
+  ); /* subtle highlight background — hover states, badges, selected rows */
+  --accent-foreground: var(
+    --brand-700
+  ); /* text on accent background — needs to be dark enough to read */
+
+  --muted: #f3f4f6; /* quiet background (disabled states, subtle sections) */
+  --muted-foreground: #6b7280; /* quiet/secondary TEXT — timestamps, placeholders, helper text */
+
+  --destructive: #dc2626; /* danger color — delete buttons, error messages (red, by convention) */
+  --destructive-foreground: #ffffff; /* text on destructive background */
+}
+
+/* ==========================================================================
+   3. @theme inline — REGISTERING VARIABLES AS TAILWIND UTILITY CLASSES
+   This is the Tailwind v4-specific step. Everything above is just plain
+   CSS variables sitting there doing nothing on their own. This block
+   tells Tailwind: "turn these into real classes I can use in JSX."
+
+   The "--color-" prefix is what Tailwind looks for to know these are
+   colors (as opposed to spacing, fonts, etc). Once registered here,
+   each variable automatically gets a FAMILY of classes for free:
+   e.g. --color-primary becomes: bg-primary, text-primary, border-primary,
+   ring-primary, fill-primary... all without extra work.
+   ========================================================================== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* registering the full brand scale so brand-50 through brand-950
+     all become usable classes: bg-brand-600, text-brand-700, etc. */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-brand-950: var(--brand-950);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
 }
 
+/* ==========================================================================
+   4. DARK MODE OVERRIDE
+   When the user's OS/browser is set to dark mode, this block runs and
+   OVERWRITES the :root variables from section 2 with new values.
+
+   KEY IDEA: the variable NAMES stay identical (--background, --primary,
+   etc). Only the VALUES change. Because your components reference the
+   variable name (bg-background, text-primary) and never the raw hex,
+   NOTHING in your JSX needs to change for dark mode to work — it's
+   automatic.
+   ========================================================================== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* near-black page */
+    --foreground: #ededed; /* near-white text */
+    --card: #171717; /* dark card, slightly lighter than page bg for depth */
+    --card-foreground: #ededed;
+    --border: #27272a; /* dark gray border, visible against dark bg */
+    --input: #27272a;
+    --ring: #5fa0b8; /* lighter brand shade — pure brand-600 would be too dim on dark bg */
+
+    --primary: #5fa0b8; /* lighter brand shade — reads better on dark bg.
+                            Saturated colors that look great on white often
+                            look muddy/too dark on black, so we go lighter. */
+    --secondary: #27272a;
+    --secondary-foreground: #ededed;
+    --accent: var(
+      --brand-900
+    ); /* dark tinted background for accents in dark mode */
+    --accent-foreground: var(
+      --brand-200
+    ); /* light text on that dark accent background */
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
   }
 }
 
+@utility desktopLayout {
+  width: 100%;
+  padding-inline: 80px;
+  padding-block: 4vh;
+  max-width: 100vw;
+}
+
+@utility mobileLayout {
+  width: 100%;
+  max-width: 100vw;
+  padding-inline: 14px;
+  padding-block: 8px;
+}
+
+/* ==========================================================================
+   5. BASE APPLICATION
+   Actually applying the variables to a real HTML element. Everything
+   above was just definitions sitting in variables — this is where the
+   page visually becomes your background/foreground colors by default,
+   even before you add any Tailwind classes in your components.
+   ========================================================================== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
