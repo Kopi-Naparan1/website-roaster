@@ -29,6 +29,7 @@ html {
   --foreground: #171717; /* main body text color — used as: text-foreground */
   --card: #ffffff; /* background of cards/panels — slightly whiter than page bg, gives depth */
   --card-foreground: #171717; /* text color inside cards */
+
   --border: #e5e7eb; /* dividers, outlines, table borders — used as: border-border */
   --input: #e5e7eb; /* border color specifically for form inputs */
   --ring: #367e96; /* the outline that appears when you Tab/focus an element (accessibility) */

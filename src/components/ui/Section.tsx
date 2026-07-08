@@ -4,7 +4,11 @@ type SectionType =
   | "overview"
   | "share"
   | "finalCta"
-  | "cardBreakdown";
+  | "clarity"
+  | "copy"
+  | "trust"
+  | "mobile"
+  | "reroast";
 
 type SectionLayoutProps = Readonly<{
   sectionType: SectionType;
@@ -26,20 +30,25 @@ export default function SectionLayout({
   headingAndSubHeadingClassName,
 }: SectionLayoutProps) {
   return (
-    <div className={`${className} mobileLayout md:desktopLayout`}>
+    <div className={`${className} min-h-screen  mobileLayout md:desktopLayout`}>
       {/* Normal Sections */}
       {sectionType !== "hero" && sectionType !== "overview" ? (
         <div className={headingAndSubHeadingClassName}>
-          <h2 className="font-heading text-4xl xl:text-5xl font-bold leading-tight  tracking-tight max-w-3xl mb-16 ">
+          <h2 className="font-heading text-4xl xl:text-5xl font-bold leading-tight  tracking-tight max-w-3xl mb-5 ">
             {heading}
           </h2>
+          <p className="font-sans text-base lg:text-lg font-normal leading-relaxed tracking-normal max-w-xl mb-16">
+            {" "}
+            {/* Fix this, just adjust, follow excel*/}
+            {subHeading}
+          </p>
         </div>
       ) : (
         <div className={headingAndSubHeadingClassName}>
           <h1 className="font-heading text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight lg:leading-none  tracking-tight lg:tracking-tighter max-w-4xl mb-6 ">
             {heading}
           </h1>
-          <p className="font-sans text-lg lg:text-xl font-normal leading-relaxed tracking-normal mb-10 ">
+          <p className="font-sans text-lg lg:text-xl font-normal leading-relaxed tracking-normal mb-10 max-w-xl">
             {subHeading}
           </p>
         </div>
