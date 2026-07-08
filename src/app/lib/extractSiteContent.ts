@@ -28,7 +28,7 @@ export function extractSiteContent(html: string): ExtractedSite {
   // Clarity: heading structure tells you if the page has a clear hierarchy
   const headings: { tag: string; text: string }[] = [];
   $("h1, h2, h3").each((_, el) => {
-    const tag = el.tagName.toLowerCase();
+    const tag = $(el).prop("tagName")?.toLowerCase() ?? "";
     const text = $(el).text().trim().replace(/\s+/g, " ");
     if (text) headings.push({ tag, text });
   });
