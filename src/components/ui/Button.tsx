@@ -6,6 +6,7 @@ type ButtonProps = Readonly<{
   buttonClassName?: string;
   onClick?: () => void;
   disabled?: boolean;
+  children?: React.ReactNode;
 }>;
 function ButtonChooser({
   variant,
@@ -13,6 +14,7 @@ function ButtonChooser({
   buttonClassName,
   onClick,
   disabled,
+  children,
 }: ButtonProps) {
   if (variant === "primary") {
     return (
@@ -22,7 +24,7 @@ function ButtonChooser({
         onClick={onClick}
         disabled={disabled}
       >
-        {text || "Roast it!"}
+        {children || text || "Roast it!"}
       </button>
     );
   } else if (variant === "secondary") {
@@ -33,7 +35,7 @@ function ButtonChooser({
         onClick={onClick}
         disabled={disabled}
       >
-        {text || "Roast another site"}
+        {children || text || "Roast another site"}
       </button>
     );
   } else if (variant === "card") {
@@ -44,7 +46,7 @@ function ButtonChooser({
         onClick={onClick}
         disabled={disabled}
       >
-        {text || "View full breakdown"}
+        {children || text || "View full breakdown"}
       </button>
     );
   }
@@ -55,6 +57,7 @@ export function Button({
   buttonClassName,
   onClick,
   disabled,
+  children,
 }: ButtonProps) {
   return (
     <ButtonChooser
@@ -63,6 +66,8 @@ export function Button({
       buttonClassName={buttonClassName}
       onClick={onClick}
       disabled={disabled}
-    />
+    >
+      {children}
+    </ButtonChooser>
   );
 }
