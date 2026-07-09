@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import SectionLayout from "../ui/Section";
 import { Button } from "../ui/Button";
 import { isValidUrl } from "@/app/lib/validateUrl";
+
 interface HeroProps {
-  sectionType: "hero";
+  sectionType: "hero"; // This serves as the second check if the section type is really "hero"
   heading: string;
   subHeading?: string;
 }
@@ -24,7 +25,7 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
     }
     const timeoutId = setTimeout(() => {
       if (isValidUrl(url)) {
-        setUrlError("");
+        setUrlError(""); //After less than a second,  error URL will be cleared if url is valid
         setgoodUrlIndicator(
           "The URL is good for roasting! Hit the button Now!",
         );

@@ -2,19 +2,22 @@
 import { extractSiteContent } from "@/app/lib/extractSiteContent";
 import { roastWebsite } from "@/app/lib/roastWithGemini";
 import { normalizeUrl } from "@/app/lib/validateUrl";
-import { assertPublicHostname } from "@/app/lib/assertSafeUrl.server";
+import { resolvePublicIp } from "@/app/lib/assertSafeUrl.server";
 import { ratelimit } from "@/app/lib/ratelimit";
 import { redis } from "@/app/lib/redis";
+import { fetchPinned } from "@/app/lib/safeFetch";
 
 async function checkCacheAndRateLimit(
   request: Request,
   cacheKey: string,
 ): Promise<{ response: Response } | { cached: unknown } | { ok: true }> {
+  // Checking if there is a record in the DB through cache ket, if there is, return that cache
   const cached = await redis.get(cacheKey);
   if (cached) {
     return { cached };
   }
 
+  // This gets the orignal users' IP to check for rate limiting
   const ip = request.headers.get("x-forwarded-for") ?? "unknown";
   const { success } = await ratelimit.limit(ip);
 
@@ -35,18 +38,30 @@ const MAX_REDIRECTS = 3;
 async function fetchSite(
   targetUrl: URL,
 ): Promise<{ response: Response } | { site: Response }> {
-  let currentUrl = targetUrl;
+  const currentUrl = targetUrl;
 
   for (let redirectCount = 0; redirectCount <= MAX_REDIRECTS; redirectCount++) {
+    // If the IP holds true, then it will be used.
+    const pinnedIp = await resolvePublicIp(currentUrl.hostname);
+
+    if (!pinnedIp) {
+      return {
+        response: Response.json(
+          { error: "That URL can't be reached" },
+          { status: 422 },
+        ),
+      };
+    }
+
     let siteResponse: Response;
 
     try {
-      siteResponse = await fetch(currentUrl.toString(), {
+      siteResponse = await fetchPinned(currentUrl, pinnedIp, {
         headers: {
           "User-Agent": "Mozilla/5.0 (compatible; WebsiteRoasterBot/1.0)",
         },
         signal: AbortSignal.timeout(10_000),
-        redirect: "manual",
+        redirect: "manual", // note: check undici support, see below
       });
     } catch {
       return {
@@ -91,20 +106,6 @@ async function fetchSite(
           ),
         };
       }
-      const revalidatedUrl = new URL(normalized);
-
-      const safe = await assertPublicHostname(revalidatedUrl.hostname);
-      if (!safe) {
-        return {
-          response: Response.json(
-            { error: "Redirect pointed to a disallowed URL" },
-            { status: 422 },
-          ),
-        };
-      }
-
-      currentUrl = revalidatedUrl;
-      continue;
     }
 
     if (!siteResponse.ok) {
@@ -128,9 +129,11 @@ export async function POST(request: Request) {
   // Parse the JSON body the client sent, e.g. { url: "https://example.com" }
   const { url } = await request.json();
 
-  // --- STEP 1: cheapest possible check first ---
+  // --- STEP 1: SANITIZATION OF URL---
+  // cheapest possible check first
   // No network calls involved, so reject obviously bad input before
   // spending any time/money on it.
+  // Second check the URL (server side)
   const normalizedUrl = normalizeUrl(url);
   if (!normalizedUrl) {
     return Response.json({ error: "Invalid URL" }, { status: 400 });
@@ -138,7 +141,7 @@ export async function POST(request: Request) {
 
   const targetUrl = new URL(normalizedUrl);
 
-  const safe = await assertPublicHostname(targetUrl.hostname);
+  const safe = await resolvePublicIp(targetUrl.hostname);
   if (!safe) {
     return Response.json(
       { error: "That URL can't be reached" },
@@ -148,14 +151,17 @@ export async function POST(request: Request) {
 
   const cacheKey = `roast:${targetUrl.hostname}${targetUrl.pathname}`;
 
-  // --- STEP 2: cache check + rate limit ---
+  // --- STEP 2: RATE LIMIT OF IP & CACHE CHECK OF URL ---
+  // cache check + rate limit
   const cacheResult = await checkCacheAndRateLimit(request, cacheKey);
   if ("response" in cacheResult) return cacheResult.response;
   if ("cached" in cacheResult)
     return Response.json({ roast: cacheResult.cached, cached: true });
 
-  // --- STEP 3: fetch the actual target site ---
+  // --- STEP 3: IF GOOD: RATELIMIT AND NO CACHE ---
+  // fetch the actual target site
   console.time("fetchSite");
+
   const fetchResult = await fetchSite(targetUrl);
   console.timeEnd("fetchSite");
   if ("response" in fetchResult) return fetchResult.response;

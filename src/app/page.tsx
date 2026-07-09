@@ -24,6 +24,7 @@ export default function Home() {
     <div className="flex flex-col flex-1  ">
       {sections.map(({ sectionID, Component }) => {
         const data = AllSectionData.find(
+          // See if hero and examples have a match inside the AllSections Data
           (i: AllSectionDataInterface) => i.sectionType === sectionID,
         );
         if (!data) return null;
