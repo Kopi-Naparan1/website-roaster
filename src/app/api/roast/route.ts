@@ -6,6 +6,8 @@ import { resolvePublicIp } from "@/app/lib/assertSafeUrl.server";
 import { ratelimit } from "@/app/lib/ratelimit";
 import { redis } from "@/app/lib/redis";
 import { fetchPinned } from "@/app/lib/safeFetch";
+import { urlToSlug } from "@/app/lib/slug";
+import { RoastDataType } from "@/app/roast/RoastBreakDown";
 
 async function checkCacheAndRateLimit(
   request: Request,
@@ -140,6 +142,7 @@ export async function POST(request: Request) {
   }
 
   const targetUrl = new URL(normalizedUrl);
+  const slug = urlToSlug(targetUrl.hostname, targetUrl.pathname);
 
   const safe = await resolvePublicIp(targetUrl.hostname);
   if (!safe) {
@@ -155,8 +158,13 @@ export async function POST(request: Request) {
   // cache check + rate limit
   const cacheResult = await checkCacheAndRateLimit(request, cacheKey);
   if ("response" in cacheResult) return cacheResult.response;
-  if ("cached" in cacheResult)
-    return Response.json({ roast: cacheResult.cached, cached: true });
+  if ("cached" in cacheResult) {
+    const { roast, url } = cacheResult.cached as {
+      roast: RoastDataType;
+      url: string;
+    };
+    return Response.json({ roast, url, cached: true, slug });
+  }
   const startTime = Date.now();
   // --- STEP 3: IF GOOD: RATELIMIT AND NO CACHE ---
   // fetch the actual target site
@@ -200,11 +208,16 @@ export async function POST(request: Request) {
   );
   // --- STEP 7: cache the fresh result for next time, then respond ---
   // 60 * 60 * 24 = 86,400 seconds = 24 hours before this entry auto-expires.
-  await redis.set(cacheKey, roast, { ex: 60 * 60 * 24 });
+  await redis.set(
+    cacheKey,
+    { roast, url: targetUrl.toString() },
+    { ex: 60 * 60 * 24 },
+  );
 
   return Response.json({
     roast,
     cached: false,
     timing: { fetchDuration, roastDuration, totalDuration },
+    slug,
   });
 }

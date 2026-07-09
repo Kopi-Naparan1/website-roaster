@@ -1,14 +1,9 @@
 type SectionType =
   | "hero"
   | "examples"
-  | "overviewHomePage"
   | "overviewResultPage"
   | "share"
-  | "finalCta"
-  | "clarity"
-  | "copy"
-  | "trust"
-  | "mobile"
+  | "roastBreakDown"
   | "reroast";
 
 type SectionLayoutProps = Readonly<{

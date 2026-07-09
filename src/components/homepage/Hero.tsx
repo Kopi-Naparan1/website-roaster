@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import SectionLayout from "../ui/Section";
 import { Button } from "../ui/Button";
 import { isValidUrl } from "@/app/lib/validateUrl";
+import { useRouter } from "next/navigation";
 
 interface HeroProps {
   sectionType: "hero"; // This serves as the second check if the section type is really "hero"
@@ -28,14 +29,12 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
   const [progress, setProgress] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const isDisabled = loading || url.trim().length === 0 || !!urlError;
-
+  const router = useRouter();
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
     };
   }, []);
 
@@ -78,9 +77,6 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
     setServerError(null);
   }
   async function handleRoast() {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    setProgress(100);
-
     if (!isValidUrl(url)) {
       setUrlError("Please enter a valid URL first.");
       return;
@@ -118,26 +114,7 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
         setgoodUrlIndicator("");
         return;
       }
-
-      console.log(
-        "Roast result:",
-        data.roast,
-        "cached:",
-        data.cached,
-        "roastTime:",
-        data.timing,
-      );
-      const seconds = (data.timing.totalDuration / 1000).toFixed();
-
-      successTimeoutRef.current = setTimeout(() => {
-        if (data) {
-          setgoodUrlIndicator(`${url} is roasted well in ${seconds} secs`);
-        }
-      }, 2000);
-
-      if (successTimeoutRef.current) {
-        clearTimeout(successTimeoutRef.current);
-      }
+      router.push(`/roast/${data.slug}`);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") {
         return;

@@ -1,7 +1,10 @@
+import { RoastDataType } from "@/app/roast/RoastBreakDown";
+
 export interface AllSectionDataInterface {
   sectionType: string;
   heading: string;
   subHeading: string;
+  roast?: RoastDataType;
 }
 
 export const AllSectionData: AllSectionDataInterface[] = [
