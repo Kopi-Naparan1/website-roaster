@@ -111,7 +111,7 @@ async function fetchSite(
     if (!siteResponse.ok) {
       return {
         response: Response.json(
-          { error: "Couldn't fetch that site" },
+          { error: "Couldn't fetch this site" },
           { status: 422 },
         ),
       };
@@ -157,13 +157,14 @@ export async function POST(request: Request) {
   if ("response" in cacheResult) return cacheResult.response;
   if ("cached" in cacheResult)
     return Response.json({ roast: cacheResult.cached, cached: true });
-
+  const startTime = Date.now();
   // --- STEP 3: IF GOOD: RATELIMIT AND NO CACHE ---
   // fetch the actual target site
-  console.time("fetchSite");
 
+  const fetchStart = Date.now();
   const fetchResult = await fetchSite(targetUrl);
-  console.timeEnd("fetchSite");
+  const fetchDuration = Date.now() - fetchStart;
+
   if ("response" in fetchResult) return fetchResult.response;
   const siteResponse = fetchResult.site;
 
@@ -181,6 +182,7 @@ export async function POST(request: Request) {
   const siteContent = extractSiteContent(html);
 
   // --- STEP 6: send it to Gemini and get the roast back ---
+  const roastStart = Date.now();
   let roast;
   console.time("roastWebsite");
   try {
@@ -191,10 +193,18 @@ export async function POST(request: Request) {
       { status: 502 },
     );
   }
-  console.timeEnd("roastWebsite");
+  const roastDuration = Date.now() - roastStart;
+  const totalDuration = Date.now() - startTime;
+  console.log(
+    `fetch: ${fetchDuration}ms, roast: ${roastDuration}ms, total: ${totalDuration}ms`,
+  );
   // --- STEP 7: cache the fresh result for next time, then respond ---
   // 60 * 60 * 24 = 86,400 seconds = 24 hours before this entry auto-expires.
   await redis.set(cacheKey, roast, { ex: 60 * 60 * 24 });
 
-  return Response.json({ roast, cached: false });
+  return Response.json({
+    roast,
+    cached: false,
+    timing: { fetchDuration, roastDuration, totalDuration },
+  });
 }
