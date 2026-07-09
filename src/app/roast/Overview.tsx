@@ -27,3 +27,4 @@ export default function Overview({
     </SectionLayout>
   );
 }
+// Focus on overview first. Next, make a card to all neat and clean. Except the score
