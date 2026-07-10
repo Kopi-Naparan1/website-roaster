@@ -21,6 +21,15 @@ export function extractSiteContent(html: string): ExtractedSite {
   // Strip noise before extracting anything else
   $("script, style, noscript, svg, link[rel='stylesheet']").remove();
 
+  // Insert a space after every element so adjacent tags don't get their
+  // text mashed together when we later call .text() (e.g. "Home" + "Works"
+  // becoming "HomeWorks" instead of "Home Works").
+  $("body")
+    .find("*")
+    .each((_, el) => {
+      $(el).after(" ");
+    });
+
   const title = $("title").first().text().trim();
   const metaDescription =
     $("meta[name='description']").attr("content")?.trim() ?? "";
@@ -46,18 +55,28 @@ export function extractSiteContent(html: string): ExtractedSite {
 
   // CTA: buttons, links styled/behaving like buttons, and submit inputs
   const ctaTexts: string[] = [];
+  const seenCtaTexts = new Set<string>();
   $("button, a[class*='btn'], a[class*='button'], input[type='submit']").each(
     (_, el) => {
       const text = $(el).text().trim() || $(el).attr("value")?.trim();
-      if (text) ctaTexts.push(text);
+      if (text && !seenCtaTexts.has(text)) {
+        seenCtaTexts.add(text);
+        ctaTexts.push(text);
+      }
     },
   );
 
   // Trust: nav often reveals trust signals (About, Contact, Privacy, Terms)
+  // De-duplicated: many sites render both a desktop and a hidden mobile nav,
+  // and Cheerio can't see CSS `display: none`, so it reads both copies.
   const navLinks: string[] = [];
+  const seenNavLinks = new Set<string>();
   $("nav a, header a").each((_, el) => {
     const text = $(el).text().trim();
-    if (text) navLinks.push(text);
+    if (text && !seenNavLinks.has(text)) {
+      seenNavLinks.add(text);
+      navLinks.push(text);
+    }
   });
 
   // Mobile: can't fully test responsiveness server-side without a headless browser,
