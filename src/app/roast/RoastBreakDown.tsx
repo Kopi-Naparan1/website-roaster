@@ -4,6 +4,7 @@ type CategoryResult = {
   score: number;
   comment: string;
   evidence: string;
+  strength: string;
   tip: string;
   quote?: string;
 };
@@ -37,7 +38,9 @@ function CategoryCard({
       </div>
       <p className="font-semibold mb-3">{data.comment}</p>
       <p className="text-sm text-foreground/70 mb-3">📌 {data.evidence}</p>
+      <p className="text-sm text-foreground/70 mb-3">📌 {data.strength}</p>
       <p className="text-sm text-foreground/70">💡 {data.tip}</p>
+      <p className="text-sm text-foreground/70 mb-3">📌 {data.quote}</p>
     </div>
   );
 }
