@@ -60,9 +60,6 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
   }, [url]);
 
   function handleCancel() {
-    if (successTimeoutRef.current) {
-      clearTimeout(successTimeoutRef.current);
-    }
     abortControllerRef.current?.abort();
     if (intervalRef.current) clearInterval(intervalRef.current);
     setLoading(false);
