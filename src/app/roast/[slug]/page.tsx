@@ -24,9 +24,10 @@ const sections: Section[] = [
 export default async function RoastResultPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const cacheKey = `roast:${slugToKey(params.slug)}`;
+  const { slug } = await params;
+  const cacheKey = `roast:${slugToKey(slug)}`;
   const rawRoast = await redis.get(cacheKey);
 
   const { roast, url } = rawRoast as { roast: RoastDataType; url: string };
