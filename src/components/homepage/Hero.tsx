@@ -116,6 +116,7 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
       if (err instanceof Error && err.name === "AbortError") {
         return;
       }
+      console.error("Roast request failed: ", err);
       setServerError(
         "Couldn't reach the server. Check your connection and try again.",
       );
