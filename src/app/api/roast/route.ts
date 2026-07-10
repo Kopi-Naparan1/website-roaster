@@ -40,7 +40,7 @@ const MAX_REDIRECTS = 3;
 async function fetchSite(
   targetUrl: URL,
 ): Promise<{ response: Response } | { site: Response }> {
-  const currentUrl = targetUrl;
+  let currentUrl = targetUrl;
 
   for (let redirectCount = 0; redirectCount <= MAX_REDIRECTS; redirectCount++) {
     // If the IP holds true, then it will be used.
@@ -108,6 +108,8 @@ async function fetchSite(
           ),
         };
       }
+      currentUrl = new URL(normalized);
+      continue;
     }
 
     if (!siteResponse.ok) {
