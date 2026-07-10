@@ -47,7 +47,7 @@ export default async function RoastResultPage({
           <Component
             roast={roast}
             subHeading={data.subHeading}
-            heading={newHeading}
+            heading={`${data.sectionType === "overview" ? newHeading : data.heading}`}
             sectionType={data.sectionType}
             key={data.sectionType}
           />
