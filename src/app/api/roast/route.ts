@@ -78,6 +78,11 @@ async function fetchSite(
 
     if (isRedirect) {
       const location = siteResponse.headers.get("location");
+      console.log("REDIRECT DEBUG:", {
+        location,
+        currentUrl: currentUrl.toString(),
+        status: siteResponse.status,
+      });
       if (!location) {
         return {
           response: Response.json(
