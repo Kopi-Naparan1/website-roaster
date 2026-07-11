@@ -8,6 +8,7 @@ import { redis } from "@/app/lib/redis";
 import { fetchPinned } from "@/app/lib/safeFetch";
 import { urlToSlug } from "@/app/lib/slug";
 import { RoastDataType } from "@/app/roast/RoastBreakDown";
+import { nanoid } from "nanoid";
 
 async function checkCacheAndRateLimit(
   request: Request,
@@ -221,10 +222,23 @@ export async function POST(request: Request) {
     { ex: 60 * 60 * 24 },
   );
 
+  const shareId = nanoid(8);
+  await redis.set(
+    `roast:${shareId}`,
+    {
+      roast,
+      url: targetUrl.toString(),
+      domain: targetUrl.hostname,
+      createdAt: Date.now(),
+    },
+    { ex: 60 * 60 * 24 * 180 },
+  );
+
   return Response.json({
     roast,
     cached: false,
     timing: { fetchDuration, roastDuration, totalDuration },
     slug,
+    shareId,
   });
 }

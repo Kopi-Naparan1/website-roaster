@@ -131,7 +131,7 @@ export default function Hero({ sectionType, heading, subHeading }: HeroProps) {
     <SectionLayout
       className="flex flex-1 flex-col justify-center items-center text-center"
       headingAndSubHeadingClassName="flex flex-col justify-center items-center "
-      childrenClassName="md:max-w-[60vw] w-full "
+      childrenClassName="md:max-w-[50vw] w-full "
       sectionType={sectionType}
       heading={heading}
       subHeading={subHeading}
