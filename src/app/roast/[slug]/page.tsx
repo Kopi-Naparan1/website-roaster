@@ -1,12 +1,12 @@
 import { redis } from "@/app/lib/redis";
 import { ComponentType } from "react";
 import { slugToKey } from "@/app/lib/slug";
-import { notFound } from "next/navigation";
 import Overview from "../Overview";
 import ExpiredID from "../ExpiredID";
 import Share from "../Share";
 import RoastBreakDown, { RoastDataType } from "@/app/roast/RoastBreakDown";
 import { AllSectionData, AllSectionDataInterface } from "@/data/AllSections";
+import ReRoast from "../ReRoast";
 
 interface Section {
   sectionID: string;
@@ -28,6 +28,10 @@ const sections: Section[] = [
     sectionID: "share",
     Component: Share as ComponentType<AllSectionDataInterface>,
   },
+  {
+    sectionID: "reroast",
+    Component: ReRoast as ComponentType<AllSectionDataInterface>,
+  },
 ];
 
 const ErrorSection: Section = {
@@ -44,16 +48,8 @@ export default async function RoastResultPage({
   const cacheKey = `roast:${slugToKey(slug)}`;
   const rawRoast = await redis.get(cacheKey);
 
-  const { roast, url, shareID } = rawRoast as {
-    roast: RoastDataType;
-    url: string;
-    shareID: string;
-  };
-
-  if (!rawRoast) notFound();
-
-  if (shareID === null) {
-    const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  if (!rawRoast) {
+    const displayUrl = slug.replace(/^https?:\/\//, "").replace(/\/$/, "");
     return (
       <ErrorSection.Component
         heading={displayUrl}
@@ -62,9 +58,15 @@ export default async function RoastResultPage({
     );
   }
 
+  const { roast, url, shareId } = rawRoast as {
+    roast: RoastDataType;
+    url: string;
+    shareId: string;
+  };
+
   return (
     <div className="flex flex-col flex-1 gap-6 ">
-      {shareID !== null &&
+      {shareId !== null &&
         sections.map(({ sectionID, Component }) => {
           const data = AllSectionData.find(
             (i: AllSectionDataInterface) => i.sectionType === sectionID,
@@ -75,7 +77,8 @@ export default async function RoastResultPage({
 
           return (
             <Component
-              shareId={data.sectionType !== "share" ? "" : shareID}
+              shareId={data.sectionType !== "share" ? "" : shareId}
+              isResultPage={data.sectionType === "reroast" ? true : false}
               roast={roast}
               subHeading={data.subHeading}
               heading={data.heading}

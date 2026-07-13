@@ -56,7 +56,6 @@ export default function Share({
   shareId,
 }: SharenProps) {
   const Fields: CategoryFieldProps[] = [
-    { category: "Overall", score: roast.overall.score },
     { category: "Clarity", score: roast.clarity.score },
     { category: "Copy", score: roast.copy.score },
     { category: "CTA", score: roast.cta.score },
