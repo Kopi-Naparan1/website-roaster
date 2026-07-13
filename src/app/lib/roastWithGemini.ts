@@ -222,7 +222,7 @@ export async function roastWebsite(siteContent: ExtractedSite) {
 
   const warnings = validateRoast(roast, siteContent);
   if (warnings.length > 0) {
-    console.warn("Roast validation warnings:", { url, warnings });
+    console.warn("Roast validation warnings:", { URL, warnings });
   }
 
   return roast;
@@ -239,7 +239,7 @@ function validateRoast(
     Solid: [7, 8],
     Impressive: [9, 10],
   };
-  const [lo, hi] = tierBounds[roast.overall.tier] ?? [1, 10];
+  const [lo, hi] = tierBounds[roast.overall.tier ?? ""] ?? [1, 10];
   if (roast.overall.score < lo || roast.overall.score > hi) {
     warnings.push(
       `Tier/score mismatch: tier="${roast.overall.tier}" score=${roast.overall.score}`,
