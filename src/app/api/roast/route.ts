@@ -203,7 +203,7 @@ export async function POST(request: Request) {
   let roast;
   console.time("roastWebsite");
   try {
-    roast = await roastWebsite(siteContent, targetUrl.toString());
+    roast = await roastWebsite(siteContent);
   } catch {
     return Response.json(
       { error: "Something went wrong generating your roast. Try again." },
