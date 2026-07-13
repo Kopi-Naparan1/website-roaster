@@ -7,51 +7,33 @@ export interface AllSectionDataInterface {
   headingUrl?: string;
   roast?: RoastDataType;
   shareId?: string;
+  isResultPage?: boolean;
 }
 
 export const AllSectionData: AllSectionDataInterface[] = [
   {
     sectionType: "hero",
-    heading: "Your website has problems. Vex will find them.",
+    heading: "Your website has problems. Vex quit his job over less.",
     subHeading:
-      "Paste your URL. Get a senior dev's honest, specific feedback in 30 seconds — no fluff, no 'just make it pop.' He works for free. He'll mention that a lot.",
+      "Paste your URL. Get a senior dev's honest, specific feedback in 30 seconds — no fluff, no 'make it pop,' no stock handshake photos. He works for free now. He'll mention that a lot.",
   },
   {
     sectionType: "examples",
     heading: "See what Vex is capable of",
     subHeading:
-      "Real sites, real scores, zero sugarcoating — sometimes zero mercy.",
+      "Real sites, real scores — he's rough on fortune-cookie headlines, generous when you've actually earned it.",
   },
   {
     sectionType: "roastBreakDown",
     heading: "Here's how Vex grades you",
-    subHeading: "Five categories. No participation trophies.",
+    subHeading:
+      "Five categories. He used to sit in these meetings. Now he runs them.",
   },
   {
     sectionType: "overviewResultPage",
     heading: "Vex's Verdict",
     subHeading:
       "Your overall score — the number he'll bring up if you ever cross him.",
-  },
-  {
-    sectionType: "clarity",
-    heading: "Clarity",
-    subHeading: "Does anyone know what you do in the first 5 seconds?",
-  },
-  {
-    sectionType: "copy",
-    heading: "Copy",
-    subHeading: "Clear and benefit-focused, or just jargon?",
-  },
-  {
-    sectionType: "trust",
-    heading: "Trust",
-    subHeading: "Would a stranger actually believe you?",
-  },
-  {
-    sectionType: "mobile",
-    heading: "Mobile",
-    subHeading: "Does it hold up on a phone, or fall apart?",
   },
   {
     sectionType: "share",
@@ -63,7 +45,7 @@ export const AllSectionData: AllSectionDataInterface[] = [
     sectionType: "reroast",
     heading: "Feed Vex another one",
     subHeading:
-      "Got a friend's site in mind? Paste it below. He hasn't had lunch.",
+      "Got a friend's site in mind? Paste it below. He works for exposure, and exposure doesn't pay for lunch.",
   },
   {
     sectionType: "expiredID",

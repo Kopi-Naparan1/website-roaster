@@ -4,8 +4,8 @@ type SectionType =
   | "overviewResultPage"
   | "share"
   | "roastBreakDown"
-  | "reroast"
-  | "expiredID";
+  | "expiredID"
+  | "reroast";
 
 type SectionLayoutProps = Readonly<{
   sectionType: SectionType;
@@ -16,6 +16,7 @@ type SectionLayoutProps = Readonly<{
   childrenClassName?: string;
   headingAndSubHeadingClassName?: string;
   headingUrl?: string;
+  isResultPage?: boolean;
 }>;
 
 export default function SectionLayout({

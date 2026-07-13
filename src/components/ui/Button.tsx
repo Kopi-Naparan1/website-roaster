@@ -31,7 +31,7 @@ function ButtonChooser({
     return (
       <button
         type="button"
-        className={`flex justify-center items-center h-11 md:h-12 font-sans  font-semibold tracking-wide px-5 lg:px-6 py-2.5 leading-none text-sm bg-secondary text-white rounded-sm ${buttonClassName}`}
+        className={`flex justify-center items-center h-10 md:h-11 font-sans  font-semibold tracking-wide px-5 lg:px-6 py-2.5 leading-none text-sm border-primary border hover:bg-brand-50 cursor-pointer duration-75 ease-in-out text-secondary-foreground rounded-sm ${buttonClassName}`}
         onClick={onClick}
         disabled={disabled}
       >
