@@ -95,6 +95,11 @@ export default function RoastBreakDown({
     { title: "Overall", data: roast.overall, score: roast.overall.score },
   ];
   const [hoveredTitle, setHoveredTitle] = useState<string | null>(null);
+  const overallScore = Math.round(
+    categories
+      .filter((c) => c.title !== "Overall")
+      .reduce((sum, field) => sum + (field.score ?? 0), 0) / 5,
+  );
 
   return (
     <SectionLayout
@@ -108,7 +113,7 @@ export default function RoastBreakDown({
           key={title}
           title={title}
           data={data}
-          score={score}
+          score={title === "Overall" ? overallScore : score}
           isDimmed={hoveredTitle !== null && hoveredTitle !== title}
           onHover={() => setHoveredTitle(title)}
           onLeave={() => setHoveredTitle(null)}

@@ -1,9 +1,10 @@
 import { redis } from "@/app/lib/redis";
 import { ComponentType } from "react";
+
 import { notFound } from "next/navigation";
 import Overview from "../../roast/Overview";
 import RoastBreakDown, { RoastDataType } from "@/app/roast/RoastBreakDown";
-import Share from "../../roast/Share";
+import ReRoast from "@/app/roast/ReRoast";
 import { AllSectionData, AllSectionDataInterface } from "@/data/AllSections";
 import { SharedSectionOverrides } from "@/data/SharedSectionOverrides";
 import type { Metadata } from "next";
@@ -23,8 +24,8 @@ const sections: Section[] = [
     Component: RoastBreakDown as ComponentType<AllSectionDataInterface>,
   },
   {
-    sectionID: "share",
-    Component: Share as ComponentType<AllSectionDataInterface>,
+    sectionID: "reroast",
+    Component: ReRoast as ComponentType<AllSectionDataInterface>,
   },
 ];
 
@@ -83,7 +84,7 @@ export default async function SharedRoastPage({
         return (
           <Component
             key={sectionID}
-            shareId={sectionID === "share" ? shareID : ""}
+            isResultPage={data.sectionType === "reroast" ? true : false}
             roast={roast}
             heading={data.heading}
             subHeading={data.subHeading}

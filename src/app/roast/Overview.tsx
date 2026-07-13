@@ -44,6 +44,10 @@ export default function Overview({
 
   const overviewData = roast.overall;
 
+  const overviewScore = Math.round(
+    Fields.reduce((sum, field) => sum + (field.score ?? 0), 0) / Fields.length,
+  );
+
   return (
     <SectionLayout
       headingUrl={headingUrl}
@@ -56,7 +60,7 @@ export default function Overview({
       <div className={` flex flex-col justify-center items-center flex-1`}>
         <div className="flex flex-col justify-center items-center mb-6 md:mb-8">
           <button className="rounded-full py-4 px-6 md:py-6 lg:py-8 md:px-8   shadow-sm hover:shadow-md hover:scale-105 ease-in-out transition-all duration-75 cursor-pointer bg-foreground/80 text-background font-semibold text-6xl md:text-5xl lg:text-6xl">
-            {overviewData.score}
+            {overviewScore}
           </button>
           <p className="text-lg mt-1 font-semibold">OVERALL</p>
           <p className=" text-xs md:text-sm font-medium text-foreground/50 truncate">
@@ -75,7 +79,7 @@ export default function Overview({
       </div>
 
       {overviewData.quote && (
-        <blockquote className="pt-6 mt-auto   text-center italic text-sm md:text-md font-heading text-foreground/80">
+        <blockquote className="pt-6 px-12 mt-auto   text-center italic text-sm md:text-md font-heading text-foreground/80">
           “{overviewData.quote}”
         </blockquote>
       )}

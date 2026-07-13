@@ -61,7 +61,8 @@ async function fetchSite(
     try {
       siteResponse = await fetchPinned(currentUrl, pinnedIp, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (compatible; WebsiteRoasterBot/1.0)",
+          "User-Agent":
+            "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
         },
         signal: AbortSignal.timeout(10_000),
         redirect: "manual", // note: check undici support, see below

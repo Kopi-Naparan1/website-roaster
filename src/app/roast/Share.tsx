@@ -64,13 +64,16 @@ export default function Share({
   ];
   const overviewData = roast.overall;
 
+  const overviewScore = Math.round(
+    Fields.reduce((sum, field) => sum + (field.score ?? 0), 0) / Fields.length,
+  );
   return (
     <SectionLayout
       sectionType={sectionType}
       heading={heading}
       className="flex flex-col justify-center items-center"
       subHeading={subHeading}
-      childrenClassName="  flex flex-col   w-[80vw] md:w-[30vw] flex-1 min-h-[60vh] "
+      childrenClassName="  flex flex-col   w-[80vw] md:w-[35vw] lg:w-[40vw] flex-1 min-h-[60vh] "
       headingAndSubHeadingClassName="flex flex-col text-center justify-center items-center"
     >
       <div className="flex flex-col group justify-center items-center overflow-hidden border rounded-sm shadow-sm">
@@ -79,14 +82,14 @@ export default function Share({
         </div>
         <div className="flex flex-col justify-center items-center py-2">
           <h3 className="text-2xl font-bold">Vex&apos;s Verdict</h3>
-          <p className="text-sm text-center">
+          <p className="text-sm text-center px-2">
             &quot;{overviewData.quote}&quot;
           </p>
         </div>
 
         <div className="flex flex-col justify-center items-center my-4 md:mb-8">
           <p className="rounded-full py-2 px-3 md:py-2 lg:py-5 md:px-3    shadow-sm hover:shadow-md hover:scale-105 ease-in-out transition-all duration-75   bg-foreground/80 text-background font-semibold text-3xl md:text-2xl lg:text-3xl">
-            {overviewData.score}
+            {overviewScore}
           </p>
           <p className="text-sm mt-1 font-regular">OVERALL</p>
           <p className=" text-xs  font-medium text-foreground/50 truncate">

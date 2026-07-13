@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { isValidUrl } from "@/app/lib/validateUrl";
+import { useRecentRoasts } from "./useRecentRoasts";
 
 function calculateProgress(elapsedSeconds: number): number {
   const target = 92;
@@ -21,7 +22,7 @@ export function useUrlRoastForm() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
-
+  const { addRoast } = useRecentRoasts();
   const isDisabled = loading || url.trim().length === 0 || !!urlError;
 
   useEffect(() => {
@@ -102,8 +103,10 @@ export function useUrlRoastForm() {
           `${data.error}: ${url}` || "Something went wrong. Please try again.",
         );
         setGoodUrlIndicator("");
+
         return;
       }
+      addRoast(url);
       router.push(`/roast/${data.slug}`);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
