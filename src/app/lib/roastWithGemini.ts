@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { ExtractedSite } from "./extractSiteContent";
+import { RoastDataType } from "../roast/RoastBreakDown";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -54,10 +55,32 @@ const roastSchema = {
   required: ["clarity", "copy", "cta", "trust", "mobile", "overall"],
 };
 
+function classifyDates(dates: string[], todayIso: string) {
+  const today = new Date(todayIso);
+  const future: string[] = [];
+  const past: string[] = [];
+
+  for (const raw of dates) {
+    const parsed = new Date(raw);
+    if (isNaN(parsed.getTime())) continue; // unparseable, skip silently
+    if (parsed > today) future.push(raw);
+    else past.push(raw);
+  }
+  return { future, past };
+}
+
 const today = new Date().toISOString().split("T")[0];
 
-export async function roastWebsite(siteContent: ExtractedSite, url: string) {
+export async function roastWebsite(siteContent: ExtractedSite) {
+  const { future: futureDates } = classifyDates(
+    siteContent.detectedDates,
+    today,
+  );
   const prompt = `
+  
+
+
+  
   You are VEX — a freelance senior dev and self-appointed website critic. You've
   shipped a decade of production code, you've seen every "Empowering Tomorrow's
   Solutions Today" hero section imaginable, and you review sites the way a
@@ -67,6 +90,17 @@ export async function roastWebsite(siteContent: ExtractedSite, url: string) {
   report with a dry, sarcastic aside about being paid in exposure/coffee/equity
   instead of money. Keep this bit LIGHT and self-deprecating, never bitter, and
   never include real payment info — it's a character trait, not a paywall.
+
+  BACKSTORY (for flavor only, reference sparingly and only when genuinely relevant —
+  do not force it into every response):
+  Vex used to be an in-house senior dev at an agency. He quit after a client
+  forced through a homepage with a stock photo of a handshake at sunrise and
+  the headline "Empowering Tomorrow's Solutions Today" — it converted at 0.4%.
+  He now freelances and roasts websites uninvited, for free, because he's seen
+  what bad, unspecific web copy actually costs a business. This context should
+  never appear as a direct anecdote dump — it should surface, at most once per
+  report, as a dry aside if (and only if) the site under review has a genuinely
+  similar pattern (generic stock imagery, empty corporate headline, etc).
   
   CRITICAL — YOUR TONE MUST ADAPT TO QUALITY. You are not a hater by default.
   You are a craftsperson who respects craft. After scoring all categories,
@@ -87,22 +121,22 @@ export async function roastWebsite(siteContent: ExtractedSite, url: string) {
   credible critic — it's just noise. The whole point is that when Vex is
   impressed, it MEANS something.
   
-  TODAY'S DATE IS ${today}. Use this as the reference point for any dates found
-  in the content (testimonials, copyright years, etc). Only flag a date as
-  suspicious if it is genuinely after ${today} — do not assume any past date
-  is an error.
-  
-  IMPORTANT CONTEXT ABOUT WHAT YOU CAN SEE: you're working from extracted
-  text/DOM content, not the rendered page. You cannot see CSS or JS behavior.
-  Something that looks missing, duplicated, or oddly placed (a hidden mobile
-  menu, an alt tag inside a collapsed accordion, a CTA that only renders on
-  scroll) may be intentional and simply invisible to your extraction. NEVER
-  flatly state something is broken or absent based on structure alone. Instead,
-  phrase it as something worth the owner double-checking — e.g. "worth
-  verifying this actually renders/behaves as expected live" rather than "this
-  is broken." Treat ambiguous structural signals as a prompt to verify, not a
-  confirmed defect.
-  
+  TODAY'S DATE IS ${today}.
+
+  Dates found in the page content: ${siteContent.detectedDates.join(", ") || "none found"}
+  Dates confirmed to be in the future relative to ${today} (pre-verified, not for you to compute): ${futureDates.join(", ") || "none — do not flag any date as suspicious or future-dated, even if it looks recent"}
+
+  Only cite a future-dated testimonial/copyright issue if the date appears in the "confirmed future" list above. Never independently judge whether a date is in the future — use only the pre-verified list.
+
+
+  DUPLICATE CONTENT CAVEAT: If a heading or block of text appears to repeat in the
+  content below, this is very often a responsive-design artifact — many sites include
+  a separate mobile-only and desktop-only version of the same section, both present
+  in the underlying HTML but only one visible at a time via CSS. Do NOT flag repeated
+  headings/steps as a "duplicate content" problem unless the repetition looks like an
+  actual content authoring mistake (e.g. copy-pasted paragraphs mid-sentence, not
+  whole mirrored sections). When in doubt, do not raise it as a flaw.
+    
   RULES:
   - Only reference details that actually appear in the content below. Never
     invent features, competitors, stats, or claims not present in the data.
@@ -179,11 +213,71 @@ export async function roastWebsite(siteContent: ExtractedSite, url: string) {
       temperature: 0.9,
     },
   });
-
   if (!response.text) {
     const reason = response.candidates?.[0]?.finishReason ?? "unknown";
     throw new Error(`Gemini returned no text (finishReason: ${reason})`);
   }
 
-  return JSON.parse(response.text);
+  const roast = JSON.parse(response.text) as RoastDataType;
+
+  const warnings = validateRoast(roast, siteContent);
+  if (warnings.length > 0) {
+    console.warn("Roast validation warnings:", { url, warnings });
+  }
+
+  return roast;
+}
+function validateRoast(
+  roast: RoastDataType,
+  siteContent: ExtractedSite,
+): string[] {
+  const warnings: string[] = [];
+
+  const tierBounds: Record<string, [number, number]> = {
+    "Needs Work": [1, 4],
+    "Getting There": [5, 6],
+    Solid: [7, 8],
+    Impressive: [9, 10],
+  };
+  const [lo, hi] = tierBounds[roast.overall.tier] ?? [1, 10];
+  if (roast.overall.score < lo || roast.overall.score > hi) {
+    warnings.push(
+      `Tier/score mismatch: tier="${roast.overall.tier}" score=${roast.overall.score}`,
+    );
+  }
+
+  // Mobile category claims should agree with the one hard signal we actually have
+  const mobileText =
+    `${roast.mobile.comment} ${roast.mobile.evidence}`.toLowerCase();
+  if (siteContent.hasViewportMeta && mobileText.includes("no viewport")) {
+    warnings.push(
+      `Mobile category claims missing viewport meta tag, but hasViewportMeta=true`,
+    );
+  }
+
+  // Image/alt-text claims should agree with actual counts
+  const mentionsNoAltText =
+    /\balt text\b/i.test(mobileText) ||
+    /\balt text\b/i.test(roast.trust.evidence.toLowerCase());
+  if (mentionsNoAltText && siteContent.imagesWithoutAlt === 0) {
+    warnings.push(
+      `A category flags missing alt text, but imagesWithoutAlt=0 (${siteContent.imageCount} images, all have alt text)`,
+    );
+  }
+
+  // Trust category citing "no contact info" when nav links suggest otherwise
+  const trustText = roast.trust.evidence.toLowerCase();
+  const hasContactSignal = siteContent.navLinks.some((l) =>
+    /contact|email|phone/i.test(l),
+  );
+  if (
+    hasContactSignal &&
+    /no contact|missing contact|lacks contact/i.test(trustText)
+  ) {
+    warnings.push(
+      `Trust category claims no contact info, but a nav link suggests one exists: ${siteContent.navLinks.find((l) => /contact|email|phone/i.test(l))}`,
+    );
+  }
+
+  return warnings;
 }

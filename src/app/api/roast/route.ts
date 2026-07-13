@@ -167,11 +167,12 @@ export async function POST(request: Request) {
   const cacheResult = await checkCacheAndRateLimit(request, cacheKey);
   if ("response" in cacheResult) return cacheResult.response;
   if ("cached" in cacheResult) {
-    const { roast, url } = cacheResult.cached as {
+    const { roast, url, shareId } = cacheResult.cached as {
       roast: RoastDataType;
       url: string;
+      shareId: string;
     };
-    return Response.json({ roast, url, cached: true, slug });
+    return Response.json({ roast, url, cached: true, slug, shareId });
   }
   const startTime = Date.now();
   // --- STEP 3: IF GOOD: RATELIMIT AND NO CACHE ---
@@ -216,13 +217,14 @@ export async function POST(request: Request) {
   );
   // --- STEP 7: cache the fresh result for next time, then respond ---
   // 60 * 60 * 24 = 86,400 seconds = 24 hours before this entry auto-expires.
+
+  const shareId = nanoid(8);
   await redis.set(
     cacheKey,
-    { roast, url: targetUrl.toString() },
+    { roast, url: targetUrl.toString(), shareId },
     { ex: 60 * 60 * 24 },
   );
 
-  const shareId = nanoid(8);
   await redis.set(
     `roast:${shareId}`,
     {

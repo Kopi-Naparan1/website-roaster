@@ -13,6 +13,7 @@ export interface ExtractedSite {
   imagesWithoutAlt: number;
   hasViewportMeta: boolean;
   wordCount: number;
+  detectedDates: string[]; // new
 }
 
 export function extractSiteContent(html: string): ExtractedSite {
@@ -34,24 +35,37 @@ export function extractSiteContent(html: string): ExtractedSite {
   const metaDescription =
     $("meta[name='description']").attr("content")?.trim() ?? "";
 
-  // Clarity: heading structure tells you if the page has a clear hierarchy
   const headings: { tag: string; text: string }[] = [];
+  const seenHeadings = new Set<string>();
   $("h1, h2, h3").each((_, el) => {
     const tag = $(el).prop("tagName")?.toLowerCase() ?? "";
     const text = $(el).text().trim().replace(/\s+/g, " ");
-    if (text) headings.push({ tag, text });
+    const key = `${tag}:${text}`;
+    if (text && !seenHeadings.has(key)) {
+      seenHeadings.add(key);
+      headings.push({ tag, text });
+    }
   });
 
-  // Copy: general readable body text, capped so you don't blow your token budget
+  // Dates: catches "January 23, 2026", "23 Jan 2026", "2026-01-23", "01/23/2026"
+  const DATE_PATTERN =
+    /\b(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}|\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}|\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{4})\b/gi;
+
+  const rawText = $("body").text();
+  const detectedDates = Array.from(new Set(rawText.match(DATE_PATTERN) ?? []));
+
   const bodyText = $("body")
     .clone()
     .find("nav, header, footer, script, style")
     .remove()
     .end()
+    .find("[class*='md:hidden'], [class*='lg:hidden'], [aria-hidden='true']")
+    .remove() // strip the responsive-duplicate copy, keep one version
+    .end()
     .text()
     .replace(/\s+/g, " ")
     .trim()
-    .slice(0, 4000); // cap — Gemini doesn't need the whole page verbatim
+    .slice(0, 4000);
 
   // CTA: buttons, links styled/behaving like buttons, and submit inputs
   const ctaTexts: string[] = [];
@@ -104,5 +118,6 @@ export function extractSiteContent(html: string): ExtractedSite {
     imagesWithoutAlt,
     hasViewportMeta,
     wordCount: bodyText.split(/\s+/).filter(Boolean).length,
+    detectedDates,
   };
 }
