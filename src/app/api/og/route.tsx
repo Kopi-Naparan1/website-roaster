@@ -121,15 +121,15 @@ export async function GET(request: Request) {
         background: "#F9FAFB",
         justifyContent: "center",
         alignItems: "center",
-        padding: "40px 60px",
+        padding: "60px 80px",
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         alt="Vex Winking"
         src={logo}
-        width={100}
-        height={80}
+        width={140}
+        height={112}
         style={{ display: "flex" }}
       />
 
@@ -137,9 +137,9 @@ export async function GET(request: Request) {
         style={{
           fontFamily: "Inter",
           fontWeight: 500,
-          fontSize: "18px",
+          fontSize: "26px",
           color: "#367E96",
-          margin: "4px 0 0 0",
+          margin: "8px 0 0 0",
         }}
       >
         {domain}
@@ -151,8 +151,8 @@ export async function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          margin: "20px 0 0 0",
-          maxWidth: "700px",
+          margin: "28px 0 0 0",
+          maxWidth: "820px",
         }}
       >
         <h3
@@ -160,7 +160,7 @@ export async function GET(request: Request) {
             fontFamily: "Space Grotesk",
             fontWeight: 700,
             margin: "0",
-            fontSize: "30px",
+            fontSize: "44px",
           }}
         >
           Vex&apos;s Verdict
@@ -170,9 +170,10 @@ export async function GET(request: Request) {
             color: "#565252",
             fontFamily: "Inter",
             fontWeight: 500,
-            margin: "8px 0 0 0",
-            fontSize: "18px",
+            margin: "14px 0 0 0",
+            fontSize: "26px",
             textAlign: "center",
+            lineHeight: 1.4,
           }}
         >
           &quot;{overviewData.quote}&quot;
@@ -185,7 +186,7 @@ export async function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          margin: "26px 0 0 0",
+          margin: "36px 0 0 0",
         }}
       >
         <p
@@ -195,8 +196,8 @@ export async function GET(request: Request) {
             background: scoreColor,
             color: "#F9FAFB",
             borderRadius: "999px",
-            padding: "16px 28px",
-            fontSize: "42px",
+            padding: "24px 42px",
+            fontSize: "64px",
             margin: "0",
           }}
         >
@@ -206,8 +207,8 @@ export async function GET(request: Request) {
           style={{
             fontFamily: "Inter",
             fontWeight: 500,
-            margin: "8px 0 0 0",
-            fontSize: "14px",
+            margin: "12px 0 0 0",
+            fontSize: "20px",
           }}
         >
           OVERALL
@@ -217,7 +218,7 @@ export async function GET(request: Request) {
             fontFamily: "Inter",
             fontWeight: 500,
             margin: "0",
-            fontSize: "14px",
+            fontSize: "20px",
             color: "#565252",
           }}
         >
@@ -229,8 +230,8 @@ export async function GET(request: Request) {
         style={{
           display: "flex",
           justifyContent: "center",
-          gap: "24px",
-          margin: "24px 0 0 0",
+          gap: "36px",
+          margin: "36px 0 0 0",
         }}
       >
         {Fields.map(({ category, score }) => (
@@ -248,10 +249,10 @@ export async function GET(request: Request) {
                 fontFamily: "Inter",
                 fontWeight: 500,
                 borderRadius: "999px",
-                padding: "8px 14px",
+                padding: "12px 20px",
                 background: "#565252",
                 color: "#eff6f8",
-                fontSize: "20px",
+                fontSize: "28px",
                 margin: "0",
               }}
             >
@@ -261,8 +262,8 @@ export async function GET(request: Request) {
               style={{
                 fontFamily: "Inter",
                 fontWeight: 500,
-                fontSize: "12px",
-                margin: "6px 0 0 0",
+                fontSize: "16px",
+                margin: "8px 0 0 0",
                 color: "#565252",
               }}
             >
