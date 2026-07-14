@@ -52,7 +52,7 @@ export async function generateMetadata({
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "website-roaster-weld.vercel.app";
   const ogUrl = `${baseUrl}/api/og?id=${shareID}`;
-  const title = `${record.domain} scored ${record.roast.overall.score}/10 — Website Roaster`;
+  const title = `${record.domain} scored ${record.roast.overall.score}/10 — Vex: Website Roaster`;
   const description = `Vex roasted ${record.domain} and gave it a ${record.roast.overall.score}/10. See the full breakdown.`;
 
   return {
