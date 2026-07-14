@@ -88,39 +88,6 @@ export default async function SharedRoastPage({
   const { roast, url } = record;
   const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-  let renderedSections;
-  try {
-    renderedSections = sections.map(({ sectionID, Component }) => {
-      const base = AllSectionData.find((i) => i.sectionType === sectionID);
-      if (!base) return <div key={sectionID}>No base data for {sectionID}</div>;
-
-      const override = SharedSectionOverrides[sectionID];
-      const data = override ? { ...base, ...override } : base;
-
-      return (
-        <Component
-          key={sectionID}
-          isResultPage={data.sectionType === "reroast" ? true : false}
-          roast={roast}
-          heading={data.heading}
-          subHeading={data.subHeading}
-          headingUrl={displayUrl}
-          sectionType={data.sectionType}
-        />
-      );
-    });
-  } catch (err) {
-    return (
-      <div>
-        <p>ERROR CAUGHT:</p>
-        <pre>{err instanceof Error ? err.message : String(err)}</pre>
-        <pre>{err instanceof Error ? err.stack : ""}</pre>
-      </div>
-    );
-  }
-
-  return <div className="flex flex-col flex-1 gap-6">{renderedSections}</div>;
-
   return (
     <div className="flex flex-col flex-1 gap-6">
       {sections.map(({ sectionID, Component }) => {
