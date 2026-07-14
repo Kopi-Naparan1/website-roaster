@@ -30,7 +30,6 @@ interface CategoryFieldProps {
 
 export const runtime = "nodejs";
 
-// Cache in module scope — read once, reused across requests
 let logoBase64: string | null = null;
 async function getLogo() {
   if (!logoBase64) {
@@ -118,20 +117,21 @@ export async function GET(request: Request) {
         flexDirection: "column",
         width: "100%",
         height: "100%",
-        background: "linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%)",
+        background: "linear-gradient(160deg, #EBF1F3 0%, #F9FAFB 60%)",
         position: "relative",
       }}
     >
-      {/* accent bar */}
+      {/* top accent bar */}
       <div
         style={{
           display: "flex",
           width: "100%",
-          height: "10px",
+          height: "8px",
           background: scoreColor,
         }}
       />
 
+      {/* main content: white "card" floating on the gradient */}
       <div
         style={{
           display: "flex",
@@ -139,169 +139,181 @@ export async function GET(request: Request) {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          padding: "30px 80px 20px 80px",
+          padding: "28px 60px",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt="Vex Winking"
-          src={logo}
-          width={120}
-          height={96}
-          style={{ display: "flex" }}
-        />
-
-        <p
-          style={{
-            fontFamily: "Inter",
-            fontWeight: 500,
-            fontSize: "26px",
-            color: "#367E96",
-            margin: "6px 0 0 0",
-          }}
-        >
-          {domain}
-        </p>
-
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            margin: "16px 0 0 0",
-            maxWidth: "820px",
+            background: "#FFFFFF",
+            borderRadius: "28px",
+            padding: "36px 64px",
+            boxShadow: "0 20px 40px rgba(23,23,23,0.10)",
+            border: "1px solid #ECECEC",
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="Vex Winking"
+            src={logo}
+            width={110}
+            height={88}
+            style={{ display: "flex" }}
+          />
+
+          {/* domain chip */}
+          <div
+            style={{
+              display: "flex",
+              background: "#EBF1F3",
+              color: "#367E96",
+              borderRadius: "999px",
+              padding: "6px 18px",
+              fontFamily: "Inter",
+              fontWeight: 500,
+              fontSize: "18px",
+              margin: "10px 0 0 0",
+            }}
+          >
+            {domain}
+          </div>
+
           <h3
             style={{
               fontFamily: "Space Grotesk",
               fontWeight: 700,
-              margin: "0",
-              fontSize: "46px",
+              margin: "14px 0 0 0",
+              fontSize: "42px",
+              color: "#171717",
             }}
           >
             Vex&apos;s Verdict
           </h3>
+
           <p
             style={{
               color: "#565252",
               fontFamily: "Inter",
               fontWeight: 500,
               margin: "10px 0 0 0",
-              fontSize: "24px",
+              fontSize: "22px",
               textAlign: "center",
               lineHeight: 1.3,
+              maxWidth: "760px",
             }}
           >
             &quot;{overviewData.quote}&quot;
           </p>
-        </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "22px 0 0 0",
-          }}
-        >
-          <p
+          <div
             style={{
-              fontFamily: "Space Grotesk",
-              fontWeight: 700,
-              background: scoreColor,
-              color: "#F9FAFB",
-              borderRadius: "999px",
-              padding: "20px 36px",
-              fontSize: "56px",
-              margin: "0",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "22px 0 0 0",
             }}
           >
-            {overviewScore}
-          </p>
-          <p
-            style={{
-              fontFamily: "Inter",
-              fontWeight: 500,
-              margin: "10px 0 0 0",
-              fontSize: "18px",
-            }}
-          >
-            OVERALL
-          </p>
-          <p
-            style={{
-              fontFamily: "Inter",
-              fontWeight: 500,
-              margin: "0",
-              fontSize: "18px",
-              color: "#565252",
-            }}
-          >
-            {overviewData.tier}
-          </p>
-        </div>
+            <p
+              style={{
+                fontFamily: "Space Grotesk",
+                fontWeight: 700,
+                background: scoreColor,
+                color: "#F9FAFB",
+                borderRadius: "999px",
+                padding: "18px 32px",
+                fontSize: "50px",
+                margin: "0",
+                boxShadow: `0 10px 24px ${scoreColor}55`,
+              }}
+            >
+              {overviewScore}
+            </p>
+            <p
+              style={{
+                fontFamily: "Inter",
+                fontWeight: 500,
+                margin: "8px 0 0 0",
+                fontSize: "16px",
+                color: "#171717",
+              }}
+            >
+              OVERALL
+            </p>
+            <p
+              style={{
+                fontFamily: "Inter",
+                fontWeight: 500,
+                margin: "0",
+                fontSize: "16px",
+                color: "#565252",
+              }}
+            >
+              {overviewData.tier}
+            </p>
+          </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "28px",
-            margin: "22px 0 0 0",
-          }}
-        >
-          {Fields.map(({ category, score }) => {
-            const badgeColor =
-              (score ?? 0) >= 7
-                ? "#367E96"
-                : (score ?? 0) >= 4
-                  ? "#D97706"
-                  : "#DC2626";
-            return (
-              <div
-                key={category}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "22px",
+              margin: "20px 0 0 0",
+            }}
+          >
+            {Fields.map(({ category, score }) => {
+              const badgeColor =
+                (score ?? 0) >= 7
+                  ? "#367E96"
+                  : (score ?? 0) >= 4
+                    ? "#D97706"
+                    : "#DC2626";
+              return (
+                <div
+                  key={category}
                   style={{
-                    fontFamily: "Inter",
-                    fontWeight: 500,
-                    borderRadius: "999px",
-                    padding: "10px 18px",
-                    background: badgeColor,
-                    color: "#F9FAFB",
-                    fontSize: "24px",
-                    margin: "0",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  {score}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "Inter",
-                    fontWeight: 500,
-                    fontSize: "14px",
-                    margin: "6px 0 0 0",
-                    color: "#565252",
-                  }}
-                >
-                  {category}
-                </p>
-              </div>
-            );
-          })}
+                  <p
+                    style={{
+                      fontFamily: "Inter",
+                      fontWeight: 500,
+                      borderRadius: "999px",
+                      padding: "8px 16px",
+                      background: badgeColor,
+                      color: "#F9FAFB",
+                      fontSize: "20px",
+                      margin: "0",
+                    }}
+                  >
+                    {score}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "Inter",
+                      fontWeight: 500,
+                      fontSize: "13px",
+                      margin: "6px 0 0 0",
+                      color: "#565252",
+                    }}
+                  >
+                    {category}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* CTA footer */}
+      {/* CTA footer with button-style pill */}
       <div
         style={{
           display: "flex",
@@ -309,20 +321,23 @@ export async function GET(request: Request) {
           background: "#171717",
           justifyContent: "center",
           alignItems: "center",
-          padding: "18px 0",
+          padding: "16px 0",
         }}
       >
-        <p
+        <div
           style={{
+            display: "flex",
+            background: "#F9FAFB",
+            color: "#171717",
+            borderRadius: "999px",
+            padding: "10px 28px",
             fontFamily: "Inter",
-            fontWeight: 500,
-            fontSize: "20px",
-            color: "#F9FAFB",
-            margin: "0",
+            fontWeight: 700,
+            fontSize: "18px",
           }}
         >
-          Roast your own site free → vex.app
-        </p>
+          Roast Your Own Site →
+        </div>
       </div>
     </div>,
     {
