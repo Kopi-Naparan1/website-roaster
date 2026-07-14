@@ -22,7 +22,7 @@ export type RoastDataType = {
   overall: CategoryResult;
 };
 
-interface SharenProps {
+interface ShareProps {
   roast: RoastDataType;
   sectionType: "share";
   heading: string;
@@ -54,7 +54,7 @@ export default function Share({
   subHeading,
   heading,
   shareId,
-}: SharenProps) {
+}: ShareProps) {
   const Fields: CategoryFieldProps[] = [
     { category: "Clarity", score: roast.clarity.score },
     { category: "Copy", score: roast.copy.score },
@@ -73,7 +73,7 @@ export default function Share({
       heading={heading}
       className="flex flex-col justify-center items-center"
       subHeading={subHeading}
-      childrenClassName="  flex flex-col   w-[80vw] md:w-[35vw] lg:w-[40vw] flex-1 min-h-[60vh] "
+      childrenClassName="  flex flex-col w-[80vw] md:w-[35vw] lg:w-[40vw] flex-1 min-h-[60vh] "
       headingAndSubHeadingClassName="flex flex-col text-center justify-center items-center"
     >
       <div className="flex flex-col group justify-center items-center overflow-hidden border rounded-sm shadow-sm">

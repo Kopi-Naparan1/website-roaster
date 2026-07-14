@@ -49,11 +49,27 @@ export async function generateMetadata({
   const record = await getRecord(shareID);
   if (!record) return { title: "Roast expired — Website Roaster" };
 
-  const ogUrl = `https://yoursite.com/api/og?id=${shareID}`;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-real-domain.com";
+  const ogUrl = `${baseUrl}/api/og?id=${shareID}`;
+  const title = `${record.domain} scored ${record.roast.overall.score}/10 — Website Roaster`;
+  const description = `Vex roasted ${record.domain} and gave it a ${record.roast.overall.score}/10. See the full breakdown.`;
+
   return {
-    title: `${record.domain} scored ${record.roast.overall.score}/10 — Website Roaster`,
-    openGraph: { images: [ogUrl] },
-    twitter: { card: "summary_large_image", images: [ogUrl] },
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: ogUrl, width: 1200, height: 630 }],
+      siteName: "Website Roaster",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogUrl],
+    },
   };
 }
 
