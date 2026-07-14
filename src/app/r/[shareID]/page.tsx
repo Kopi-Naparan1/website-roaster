@@ -81,21 +81,18 @@ export default async function SharedRoastPage({
   const { shareID } = await params;
   const record = await getRecord(shareID);
 
+  if (!record) {
+    notFound();
+  }
+
+  const { roast, url } = record;
+  const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
   return (
     <div>
-      <p>shareID: {shareID}</p>
-      <p>record found: {record ? "YES" : "NO"}</p>
-      <pre>{JSON.stringify(record, null, 2)}</pre>
+      <p>Made it past notFound check</p>
+      <p>displayUrl: {displayUrl}</p>
     </div>
   );
-
-  // if (!record) {
-  //   notFound();
-  // }
-
-  // const { roast, url } = record;
-  // const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
-
   // return (
   //   <div className="flex flex-col flex-1 gap-6">
   //     {sections.map(({ sectionID, Component }) => {
