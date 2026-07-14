@@ -50,7 +50,7 @@ export async function generateMetadata({
   if (!record) return { title: "Roast expired — Website Roaster" };
 
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-real-domain.com";
+    process.env.NEXT_PUBLIC_SITE_URL ?? "website-roaster-weld.vercel.app";
   const ogUrl = `${baseUrl}/api/og?id=${shareID}`;
   const title = `${record.domain} scored ${record.roast.overall.score}/10 — Website Roaster`;
   const description = `Vex roasted ${record.domain} and gave it a ${record.roast.overall.score}/10. See the full breakdown.`;
