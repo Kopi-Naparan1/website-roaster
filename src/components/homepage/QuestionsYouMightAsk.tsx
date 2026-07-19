@@ -157,7 +157,6 @@ export default function QuestionsYouMightAsk({
   }, [currentEntry, handleSubmitQuestion]);
   return (
     <SectionLayout
-      id={sectionType}
       childrenClassName="flex flex-col relative overflow-hidden md:flex-row md:h-[60vh] md:max-h-160 lg:h-[70vh] border border-foreground/50 rounded-sm"
       headingAndSubHeadingClassName="text-center md:text-left justify-center items-center"
       heading={heading}
