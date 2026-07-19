@@ -78,7 +78,11 @@ export default function Share({
     >
       <div className="flex flex-col group justify-center items-center overflow-hidden border rounded-sm shadow-sm">
         <div className="group-hover:animate-bounce-small">
-          <Image alt="Vex Winking" src={VexWink} />
+          <Image
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+            alt="Vex Winking"
+            src={VexWink}
+          />
         </div>
         <div className="flex flex-col justify-center items-center py-2">
           <h3 className="text-2xl font-bold">Vex&apos;s Verdict</h3>

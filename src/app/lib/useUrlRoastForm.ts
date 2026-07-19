@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { isValidUrl } from "@/app/lib/validateUrl";
 import { useRecentRoasts } from "./useRecentRoasts";
-
+import { recordRoastCompleted } from "@/components/utils/VexProgress";
 function calculateProgress(elapsedSeconds: number): number {
   const target = 92;
   const speed = 0.25;
@@ -21,6 +21,7 @@ export function useUrlRoastForm() {
   const [progress, setProgress] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const cancelledRef = useRef(false);
   const router = useRouter();
   const { addRoast } = useRecentRoasts();
   const isDisabled = loading || url.trim().length === 0 || !!urlError;
@@ -36,9 +37,7 @@ export function useUrlRoastForm() {
     const timeoutId = setTimeout(() => {
       if (isValidUrl(url)) {
         setUrlError("");
-        setGoodUrlIndicator(
-          "The URL is good for roasting! Hit the button Now!",
-        );
+        setGoodUrlIndicator("The URL is good for roasting!");
       } else {
         setUrlError(
           "That doesn't look like a valid URL (e.g. https://example.com)",
@@ -50,6 +49,7 @@ export function useUrlRoastForm() {
   }, [url]);
 
   function handleCancel() {
+    cancelledRef.current = true;
     abortControllerRef.current?.abort();
     if (intervalRef.current) clearInterval(intervalRef.current);
     setLoading(false);
@@ -73,6 +73,7 @@ export function useUrlRoastForm() {
       setUrlError("Please enter a valid URL first.");
       return;
     }
+    cancelledRef.current = false;
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
@@ -100,13 +101,21 @@ export function useUrlRoastForm() {
 
       if (!res.ok) {
         setServerError(
-          `${data.error}: ${url}` || "Something went wrong. Please try again.",
+          data.error
+            ? `${data.error}: ${url}`
+            : "Something went wrong. Please try again.",
         );
         setGoodUrlIndicator("");
 
         return;
       }
       addRoast(url);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      setProgress(100);
+
+      await new Promise((resolve) => setTimeout(resolve, 350));
+      if (cancelledRef.current) return;
+      recordRoastCompleted(data.slug);
       router.push(`/roast/${data.slug}`);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
@@ -116,8 +125,9 @@ export function useUrlRoastForm() {
       );
     } finally {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      setProgress(100);
-      setTimeout(() => setLoading(false), 400);
+      setLoading(false);
+      setProgress(0);
+      setElapsedSeconds(0);
     }
   }
 

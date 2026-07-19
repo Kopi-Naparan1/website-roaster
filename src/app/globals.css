@@ -29,7 +29,6 @@ html {
   --foreground: #171717; /* main body text color — used as: text-foreground */
   --card: #ffffff; /* background of cards/panels — slightly whiter than page bg, gives depth */
   --card-foreground: #171717; /* text color inside cards */
- 
 
   --border: #e5e7eb; /* dividers, outlines, table borders — used as: border-border */
   --input: #e5e7eb; /* border color specifically for form inputs */
@@ -184,6 +183,35 @@ html {
   padding-block: 8px;
 }
 
+@utility mobileHeadingLayout {
+  width: 100%;
+  max-width: 100vw;
+  padding-inline: 14px;
+}
+
+@utility desktopHeadingLayout {
+  width: 100%;
+  padding-inline: 80px;
+
+  max-width: 100vw;
+}
+
+@keyframes typingWave {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+.typing-dot {
+  animation: typingWave 1.2s infinite ease-in-out;
+}
+
 @layer utilities {
   @keyframes bounce-small {
     0%,
@@ -199,6 +227,34 @@ html {
 
   .group:hover .group-hover\:animate-bounce-small {
     animation: bounce-small 1.4s ease-in-out infinite;
+  }
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring);
+  }
+}
+
+@utility custom-scroll {
+  scrollbar-width: thin; /* Firefox: thin | auto | none */
+  scrollbar-color: var(--brand-400) var(--brand-100); /* Firefox: thumb track */
+
+  &::-webkit-scrollbar {
+    width: 8px; /* vertical scrollbar width */
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--brand-100);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--brand-400);
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-500);
   }
 }
 

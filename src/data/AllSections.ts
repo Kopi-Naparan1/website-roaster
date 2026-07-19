@@ -25,9 +25,14 @@ export const AllSectionData: AllSectionDataInterface[] = [
   },
   {
     sectionType: "roastBreakDown",
-    heading: "Here's how Vex grades you",
+    heading: "Here's how Vex graded this site",
     subHeading:
       "Five categories. He used to sit in these meetings. Now he runs them.",
+  },
+  {
+    sectionType: "questionsYouMightAsk",
+    heading: "Vex Answers, Reluctantly",
+    subHeading: "He's not always right. He'll tell you when he isn't.",
   },
   {
     sectionType: "overviewResultPage",
@@ -52,5 +57,11 @@ export const AllSectionData: AllSectionDataInterface[] = [
     heading: "Expired ID",
     subHeading:
       "This roast has expired. Try roasting it again to view the updated roast.",
+  },
+  {
+    sectionType: "about",
+    heading: "Who's Vex?",
+    subHeading:
+      "A senior dev who got laid off, got bitter, and got an API key.",
   },
 ];

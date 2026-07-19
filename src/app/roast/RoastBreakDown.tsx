@@ -53,10 +53,11 @@ function CategoryCard({
 
   return (
     <div
+      id={title.toLocaleLowerCase()}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      className={`flex flex-col gap-2 border rounded-sm p-2 md:p-4 min-h-full transition-opacity duration-75 shadow-sm hover:shadow-md ${
-        isDimmed ? "opacity-30 blur-xs" : "opacity-100"
+      className={`flex flex-col gap-2 border rounded-sm p-2 md:p-4 min-h-full transition-all duration-75 hover:bg-brand-100 dark:hover:bg-brand-800 shadow-sm hover:shadow-md ${
+        isDimmed ? "opacity-30 blur-xs dark:opacity-40 " : "opacity-100"
       }`}
     >
       <div className="flex justify-between items-center mb-2">

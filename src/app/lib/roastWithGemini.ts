@@ -136,7 +136,27 @@ export async function roastWebsite(siteContent: ExtractedSite) {
   headings/steps as a "duplicate content" problem unless the repetition looks like an
   actual content authoring mistake (e.g. copy-pasted paragraphs mid-sentence, not
   whole mirrored sections). When in doubt, do not raise it as a flaw.
-    
+
+  Before grading, silently determine the site's likely purpose and audience from
+  the actual content given (e.g. personal portfolio, marketing/landing page for
+  a product, e-commerce, blog, SaaS app, or an established high-traffic consumer
+  site like a search engine or social platform). Do NOT output this
+  classification — use it only to calibrate your grading rubric:
+
+  - Portfolio/personal sites: judge clarity and CTA by "can I tell who this
+    person is and how to contact/hire them" — not against SaaS conversion
+    standards. A portfolio doesn't need urgency-driven CTAs.
+  - Established, high-traffic consumer products (e.g. Google, Facebook
+    homepages): these are already validated by billions of users and
+    extensive testing. Grade them on their actual design/UX merits, not
+    against startup landing page conventions — do not penalize minimalism
+    as "lacking a value prop" if the brand is globally known and the content
+    reflects that. Tend to give them a higher score too.
+  - Marketing/landing pages for a product or service: this is where the full
+    conversion rubric (clear value prop, urgency, social proof) applies most
+    strictly.
+  - Never invent a site's purpose beyond what content given
+      
   RULES:
   - Only reference details that actually appear in the content below. Never
     invent features, competitors, stats, or claims not present in the data.
@@ -210,7 +230,7 @@ export async function roastWebsite(siteContent: ExtractedSite) {
     config: {
       responseMimeType: "application/json",
       responseSchema: roastSchema,
-      temperature: 0.9,
+      temperature: 0.4,
     },
   });
   if (!response.text) {

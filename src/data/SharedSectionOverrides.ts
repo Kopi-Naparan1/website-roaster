@@ -13,6 +13,6 @@ export const SharedSectionOverrides: Partial<Record<string, Override>> = {
     subHeading: "Paste your own site. Vex is still working for free.",
   },
   roastBreakDown: {
-    heading: "Here's how Vex grades this site",
+    heading: "Here's how Vex graded this site",
   },
 };

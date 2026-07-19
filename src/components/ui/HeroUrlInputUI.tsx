@@ -1,7 +1,9 @@
+import Image from "next/image";
 import { Button } from "./Button";
 import { X, Archive, Trash2 } from "lucide-react";
 import { useRecentRoasts } from "@/app/lib/useRecentRoasts";
 import { useState, useRef, useEffect } from "react";
+import VexTyping from "../../../public/vex/vex-roasting.webp";
 
 interface HeroUrlInputUI {
   serverError: string | null;
@@ -73,11 +75,15 @@ export function HeroUrlInputUI({
               value={url}
               onChange={(e) => handleChange(e.target.value)}
               placeholder="Input the URL of the site"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleRoast();
+              }}
               className="relative w-full md:max-w-auto md:flex-1 rounded-sm border border-foreground/60 bg-input pl-3 pr-18 h-11   md:mb-0 focus:border-foreground focus:outline-none text-base font-normal leading-normal tracking-normal placeholder:text-base lg:placeholder:text-sm placeholder:font-normal placeholder:leading-normal placeholder:tracking-normal"
             ></input>
+
             <div className="absolute flex flex-row gap-2 right-3 top-1/2 -translate-y-1/2 text-foreground/60 z-20">
               <button
-                className="cursor-pointer duration-75 ease-in-out transition-opacity hover:text-foreground"
+                className="cursor-pointer duration-75 ease-in-out transition-opacity hover:text-foreground focus-ring"
                 type="button"
                 onClick={() => handleChange("")}
               >
@@ -85,7 +91,7 @@ export function HeroUrlInputUI({
               </button>
 
               {showArchive && (
-                <div className="absolute right-0 top-full mt-2 w-72 rounded-sm border border-foreground/80 bg-white shadow-md z-10">
+                <div className="absolute right-0 top-full mt-2 w-72 rounded-sm border border-foreground/80 bg-background shadow-md z-10">
                   {roasts.length === 0 ? (
                     <p className="text-xs text-foreground/60 p-3">
                       {" "}
@@ -93,17 +99,16 @@ export function HeroUrlInputUI({
                     </p>
                   ) : (
                     <>
-                      {" "}
                       <div className="flex justify-between p-2 text-xs font-semibold border-b">
                         <p>Previously roasted sites </p>
                         <p>{roasts.length}/10</p>
                       </div>
-                      <ul className="max-h-60 overflow-y-auto">
+                      <ul className="max-h-60 overflow-y-auto  overflow-x-hidden ">
                         {roasts.map((r, index) => (
                           <li key={r.url}>
                             <button
                               type="button"
-                              className="w-full text-left p-2 text-xs hover:bg-foreground/10 cursor-pointer  duration-75 ease-in-out transition-colors "
+                              className="w-full flex items-center text-left p-2 text-xs hover:bg-foreground/10 cursor-pointer duration-75 ease-in-out transition-colors"
                               onClick={() => {
                                 handleChange(r.url);
                                 setShowArchive(false);
@@ -112,16 +117,21 @@ export function HeroUrlInputUI({
                               <span className="text-foreground/30 text-xs shrink-0 pr-2">
                                 {index + 1}
                               </span>
-                              <span className="truncate text-xs text-foreground/70">
-                                {index === 0 ? `${r.url} (newest)` : r.url}
+                              <span className="truncate min-w-0 flex-1 text-xs text-foreground/70">
+                                {r.url}
                               </span>
+                              {index === 0 && (
+                                <span className="shrink-0 pl-1 text-xs text-foreground/70">
+                                  (newest)
+                                </span>
+                              )}
                             </button>
                           </li>
                         ))}
                       </ul>
                       <button
                         type="button"
-                        className="flex gap-2 cursor-pointer flex-row w-full text-left p-2 text-xs text-red-400/80 hover:text-red-500 duration-75 ease-in-out transition-colors hover:bg-red-200 border-t border-foreground/10"
+                        className="flex gap-2 cursor-pointer flex-row w-full text-left p-2 text-xs text-red-400/80  hover:text-red-500 duration-75 ease-in-out transition-colors hover:bg-red-200 border-t border-foreground/10"
                         onClick={clearRoasts}
                       >
                         <Trash2 size={12}></Trash2>
@@ -173,7 +183,16 @@ export function HeroUrlInputUI({
           >
             {loading ? (
               <>
-                Roasting <span className="animate-pulse">🔥</span>
+                Roasting
+                <div className="animate-pulse shrink-0 ml-1 w-[2.2em] h-[2.2em] relative">
+                  <Image
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                    src={VexTyping}
+                    alt="Vex logo typing his keyboard"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </>
             ) : (
               "Roast it!"
