@@ -84,8 +84,9 @@ export default function Tip() {
         </a>
 
         <div
-          onMouseDown={() => setIsHovered(!true)}
+          onClick={() => setIsHovered((prev) => !prev)}
           onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           className="relative flex justify-center items-center w-40 h-40 border rounded-sm  "
         >
           <p className="text-xs opacity-20 max-w-[90%]">
