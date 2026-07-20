@@ -39,8 +39,7 @@ export const trustPrivacyEntries: FAQEntry[] = [
     id: "suggestion-feedback",
     question: "I have a suggestion to improve the site, where do I say it?",
     answer:
-      // TODO: swap in your real feedback channel (email, form, Discord, etc.) once you have one set up.
-      "Send it my way — [insert your feedback email/form link here]. I read all of them, even the ones that just say 'add dark mode.'",
+      "Send it my way through the Contact page — footer link. I read all of them, even the ones that just say 'add dark mode.'",
     category: "trust-privacy",
   },
 ];

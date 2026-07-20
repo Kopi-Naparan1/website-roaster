@@ -94,6 +94,7 @@ export default function Example({
     <SectionLayout
       sectionType={sectionType}
       heading={heading}
+      className="bg-background-alt"
       headingAndSubHeadingClassName="text-center md:text-left justify-center items-center"
       subHeading={subHeading}
       childrenClassName="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0"

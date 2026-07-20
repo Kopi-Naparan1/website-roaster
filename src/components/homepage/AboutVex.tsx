@@ -80,7 +80,7 @@ function ChapterMaker({
       </div>
 
       <div className="w-full lg:w-2/5 flex items-center justify-center md:justify-start">
-        <div className="relative w-full  lg:max-w-full h-64 md:h-84 lg:h-70 rounded-sm shadow-md overflow-hidden">
+        <div className="relative w-full  lg:max-w-full h-74 md:h-120 lg:h-100 rounded-sm shadow-md overflow-hidden">
           <Image
             src={chapter.supportingImage}
             fill

@@ -29,7 +29,7 @@ html {
   --foreground: #171717; /* main body text color — used as: text-foreground */
   --card: #ffffff; /* background of cards/panels — slightly whiter than page bg, gives depth */
   --card-foreground: #171717; /* text color inside cards */
-
+  --background-alt: #f0f3f5; /* alternate section background — light mode */
   --border: #e5e7eb; /* dividers, outlines, table borders — used as: border-border */
   --input: #e5e7eb; /* border color specifically for form inputs */
   --ring: #367e96; /* the outline that appears when you Tab/focus an element (accessibility) */
@@ -87,7 +87,7 @@ html {
   --destructive: #dc2626; /* danger color — delete buttons, error messages (red, by convention) */
   --destructive-foreground: #ffffff; /* text on destructive background */
 }
-
+@custom-variant dark (&:where(.dark, .dark *));
 /* ==========================================================================
    3. @theme inline — REGISTERING VARIABLES AS TAILWIND UTILITY CLASSES
    This is the Tailwind v4-specific step. Everything above is just plain
@@ -102,6 +102,7 @@ html {
    ========================================================================== */
 @theme inline {
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -149,6 +150,27 @@ html {
    NOTHING in your JSX needs to change for dark mode to work — it's
    automatic.
    ========================================================================== */
+
+.dark {
+  --background: #121316; /* soft near-black with a hint of blue, not pure black */
+  --foreground: #e4e4e7; /* slightly off-white, not stark white — easier on eyes */
+  --card: #1c1e22; /* clearly lighter than background — real separation/elevation */
+  --card-foreground: #e4e4e7;
+  --border: #2e3136; /* visible but soft */
+  --input: #2e3136;
+  --ring: #5fa0b8;
+  --background-alt: #1a1c20;
+
+  --primary: #5fa0b8;
+  --primary-foreground: #0a0a0a; /* dark text on light-ish primary reads better than white-on-light-blue */
+  --secondary: #2a2c30;
+  --secondary-foreground: #e4e4e7;
+  --accent: var(--brand-900);
+  --accent-foreground: var(--brand-200);
+  --muted: #202226;
+  --muted-foreground: #9a9ca3;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #121316; /* soft near-black with a hint of blue, not pure black */
@@ -158,6 +180,7 @@ html {
     --border: #2e3136; /* visible but soft */
     --input: #2e3136;
     --ring: #5fa0b8;
+    --background-alt: #1a1c20;
 
     --primary: #5fa0b8;
     --primary-foreground: #0a0a0a; /* dark text on light-ish primary reads better than white-on-light-blue */

@@ -71,7 +71,7 @@ export default function Overview({
       headingUrl={headingUrl}
       headingAndSubHeadingClassName="text-center flex flex-col justify-center items-center"
       sectionType={sectionType}
-      className="flex flex-col mt-[5vh] md:mt-4 lg:mt-6"
+      className="flex flex-col  "
       childrenClassName="flex flex-col flex-1  "
       heading={heading}
     >

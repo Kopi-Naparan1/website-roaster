@@ -1,3 +1,4 @@
+import Script from "next/script";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Heading from "@/components/layout/Heading";
@@ -27,9 +28,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased custom-scroll`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}   h-full antialiased custom-scroll`}
     >
-      <body className="min-h-full flex flex-col  ">
+      <body className="min-h-full flex flex-col">
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+        try {
+          const t = localStorage.getItem('theme');
+          const dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (_) {}
+      `}
+        </Script>
         <Heading></Heading>
         {children}
         <Footer></Footer>

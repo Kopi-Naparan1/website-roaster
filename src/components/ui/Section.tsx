@@ -90,7 +90,7 @@ export default function SectionLayout({
         </div>
       ) : (
         // Hero Sections
-        <div className={headingAndSubHeadingClassName}>
+        <div className={`${headingAndSubHeadingClassName} mt-[5vh]`}>
           <h1
             className={`font-heading text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight lg:leading-none tracking-tight max-w-4xl mb-6 ${
               sectionType === "overviewResultPage" ? "flex flex-col" : ""

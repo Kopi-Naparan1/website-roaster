@@ -13,8 +13,7 @@ export const monetizationEntries: FAQEntry[] = [
     id: "how-to-donate",
     question: "I really want to support the project, how do I donate?",
     answer:
-      // TODO: once the tip jar is live, swap this for the real PayPal / GCash link/handle.
-      "Not officially live yet — but when the tip jar drops, expect a PayPal and GCash link right here. Until then, my payment is your website getting better. That's it. That's the invoice.",
+      "Ko-fi's live — hit Contact Me in the footer, it's on that page. GCash works too if you're local. Either way, I see it, I appreciate it, and it goes straight back into enhancing the roasting.",
     category: "monetization",
   },
   {

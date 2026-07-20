@@ -104,6 +104,7 @@ export default function RoastBreakDown({
 
   return (
     <SectionLayout
+      className="bg-background-alt"
       sectionType={sectionType}
       heading={heading}
       headingAndSubHeadingClassName="flex flex-col text-center justify-center items-center"

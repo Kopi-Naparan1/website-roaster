@@ -167,7 +167,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-120 md:max-w-130 mx-auto bg-brand-200 rounded-lg flex flex-col py-6 px-5 gap-4 shadow-md"
+      className="w-full max-w-120 md:max-w-130 mx-auto bg-brand-200 dark:bg-brand-700 mt-12 rounded-lg flex flex-col py-6 px-5 gap-4 shadow-md"
     >
       <h3 className="text-sm font-bold text-center opacity-80 text-foreground">
         Please not the &apos;Add dark mode!&apos;
@@ -218,13 +218,10 @@ export default function Contact() {
       <SectionLayout
         sectionType="contact"
         heading="Talk to the Human Behind the Roasts"
-        className="mt-[5vh]"
         headingAndSubHeadingClassName="flex flex-col justify-center items-center text-center"
         subHeading="Suggestions, feedback, or portfolio inquiries — all welcome."
       >
-        <div>
-          <ContactForm></ContactForm>
-        </div>
+        <ContactForm></ContactForm>
       </SectionLayout>
       <Tip></Tip>
     </>

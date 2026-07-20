@@ -1,6 +1,6 @@
 "use client";
 import SectionLayout from "../ui/Section";
-import { Send } from "lucide-react";
+import { Send, X, Trash2 } from "lucide-react";
 import {
   useState,
   useSyncExternalStore,
@@ -120,6 +120,10 @@ export default function QuestionsYouMightAsk({
     [isTyping, message],
   );
 
+  function handleClickDeleteAllChat() {
+    saveMessages([]);
+  }
+
   const suggestedFollowUps =
     lastAnsweredEntry?.followUpIds
       ?.slice(0, 1)
@@ -150,6 +154,7 @@ export default function QuestionsYouMightAsk({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && currentEntry) {
         handleSubmitQuestion(currentEntry);
+        (document.activeElement as HTMLElement)?.blur();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -160,13 +165,14 @@ export default function QuestionsYouMightAsk({
       childrenClassName="flex flex-col relative overflow-hidden md:flex-row md:h-[60vh] md:max-h-160 lg:h-[70vh] border border-foreground/50 rounded-sm"
       headingAndSubHeadingClassName="text-center md:text-left justify-center items-center"
       heading={heading}
+      className="bg-background-alt"
       subHeading={subHeading}
       sectionType={sectionType}
     >
       {/* LEFT SIDE PANEL */}
-      <div className="h-[70vh] md:h-full w-full md:w-1/2 lg:w-3/5 bg-brand-50 border-r border-foreground/20 dark:bg-brand-800/40 lg:rounded-l-sm flex flex-col p-2">
+      <div className="h-[70vh] relative  md:h-full w-full md:w-1/2 lg:w-3/5 bg-brand-50 border-r border-foreground/20 dark:bg-brand-800/40 lg:rounded-l-sm flex flex-col p-2">
         {/* MESSAGES */}
-        <div className="flex-1  mb-4 overflow-y-auto ">
+        <div className="flex-1  mb-4 overflow-y-auto  ">
           <ul className="flex flex-col justify-end h-full px-2">
             {message.map((m, index) => (
               <li className={`flex flex-row items-end `} key={index}>
@@ -218,8 +224,17 @@ export default function QuestionsYouMightAsk({
           </ul>
         </div>
         <button
+          onClick={handleClickDeleteAllChat}
+          className="text-red-300 absolute right-1 top-2 flex  gap-1 bg-background rounded-sm opacity-40 px-2 py-0.5 cursor-pointer hover:text-red-400 duration-75 ease-in-out transition-all hover:opacity-100"
+        >
+          <span className="text-xs">Delete Entire Chat</span>
+          <span>
+            <Trash2 size={12}></Trash2>
+          </span>
+        </button>
+        <button
           type="button"
-          className="md:hidden bg-brand-600 text-background p-1 rounded-full mb-1 self-start text-xs    "
+          className="md:hidden bg-brand-600 text-background p-1 rounded-full mb-1 self-start text-xs dark:text-foreground/80    "
           onClick={() => setIsPanelOpen(true)}
         >
           Click: Browse Topics
@@ -230,13 +245,13 @@ export default function QuestionsYouMightAsk({
           {lastAnsweredEntry && suggestedFollowUps.length > 0 && (
             <button
               onClick={() => handleOnClickQuestion(suggestedFollowUps[0])}
-              className=" absolute bottom-full mb-2 left-1/2 max-w-[90%] -translate-x-1/2 bg-foreground/30 shadow-md hover:bg-foreground opacity-70 text-background dark:text-foreground dark:hover:text-background  dark:hover:bg-foreground dark:bg-foreground/40 cursor-pointer  transition-colors duration-150 text-left rounded-md   p-1 flex items-start gap-2 text-xs leading-snug"
+              className=" absolute bottom-full mb-2 left-1/2 max-w-[90%] -translate-x-1/2 bg-foreground/50 shadow-md hover:bg-foreground opacity-70 text-background dark:text-background dark:hover:text-background  dark:hover:bg-foreground dark:bg-foreground  cursor-pointer  transition-colors duration-150 text-left rounded-md   p-1 flex items-start gap-2 text-xs leading-snug"
               type="button"
             >
               {suggestedFollowUps[0].question}
             </button>
           )}
-          <div className="w-full min-h-10   px-2 py-1.5 md:pr-20 border border-foreground/50 rounded-sm wrap-break-word whitespace-normal text-sm flex items-center">
+          <div className="w-full min-h-10   pl-2 pr-20 py-1.5 md:pr-20 border border-foreground/50 rounded-sm wrap-break-word whitespace-normal text-sm flex items-center">
             {activeQuestion}
           </div>
 
@@ -270,7 +285,7 @@ export default function QuestionsYouMightAsk({
 
     `}
       >
-        <div className="lg:h-auto bg-brand-200 flex-wrap dark:bg-brand-800  py-2 flex flex-row gap-4 px-4 ">
+        <div className="relative lg:h-auto bg-brand-200 flex-wrap dark:bg-brand-800  py-2 flex flex-row gap-4 pl-4 pr-6 ">
           {categories.map((category) => (
             <button
               onClick={() => setActiveCategory(category)}
@@ -281,6 +296,12 @@ export default function QuestionsYouMightAsk({
               {category.replaceAll("-", " ")}
             </button>
           ))}
+          <button
+            onClick={() => setIsPanelOpen(false)}
+            className="md:hidden block md:pointer-events-none  absolute right-1 top-1  rounded-full border border-foreground/50 p-0.5 opacity-80"
+          >
+            <X size={14}></X>
+          </button>
         </div>
 
         <div className="flex flex-1 min-h-0 flex-col gap-2 justify-start p-3 overflow-y-auto custom-scroll  ">

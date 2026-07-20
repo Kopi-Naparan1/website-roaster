@@ -24,10 +24,15 @@ export const alreadyRoastedPageNavigation: { label: string; link: string }[] = [
   { label: "Back to home", link: "/" },
 ];
 
+export const contactNavigation: { label: string; link: string }[] = [
+  { label: "Back to home", link: "/" },
+];
+
 export function getNavigationForThePage(pathname: string) {
   if (pathname === "/") return navigation;
   if (pathname.startsWith("/roast/")) return resultPageNavigation;
   if (pathname.startsWith("/r/")) return alreadyRoastedPageNavigation;
+  if (pathname.startsWith("/contact")) return contactNavigation;
   return navigation;
 }
 // lib/useNavigationClick.ts
