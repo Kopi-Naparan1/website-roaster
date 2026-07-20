@@ -59,7 +59,12 @@ export default function Footer() {
           <p className="text-xs opacity-70">Developer</p>
         </div>
         <div className="flex flex-col gap-2 mt-6">
-          <a className="text-xs px-1 py-0.5 flex justify-center items-center  text-background bg-brand-400 rounded-sm hover:bg-brand-500 duration-75 ease-in-out transition-colors cursor-pointer">
+          <a
+            href="https://github.com/Kopi-Naparan1/website-roaster"
+            rel="noopener noreferrer"
+            target="_blank"
+            className="text-xs px-1 py-0.5 flex justify-center items-center  text-background bg-brand-400 rounded-sm hover:bg-brand-500 duration-75 ease-in-out transition-colors cursor-pointer"
+          >
             View GitHub Code Repo
           </a>
           <button

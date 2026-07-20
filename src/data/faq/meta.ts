@@ -30,7 +30,7 @@ export const metaEntries: FAQEntry[] = [
     id: "how-to-use",
     question: "How do I use this chat?",
     answer:
-      "Click a question on the left and send. That's it. That's the whole interface.  ",
+      "On desktop, just click a question on the right and hit send. On mobile, tap 'Browse Topics' first to pull up the question list. That's the whole interface.",
     category: "meta",
     typingDelayMs: [1000, 2500],
   },

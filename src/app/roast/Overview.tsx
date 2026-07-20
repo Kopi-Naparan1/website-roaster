@@ -4,7 +4,7 @@ import Image from "next/image";
 import SectionLayout from "@/components/ui/Section";
 import { RoastDataType } from "./RoastBreakDown";
 import VexOverview from "../../../public/vex/vex-overview.webp";
-import Link from "next/link";
+ 
 
 interface OverviewProps {
   roast: RoastDataType;
