@@ -24,9 +24,8 @@ Next.js (App Router) · TypeScript · Tailwind CSS v4 · Gemini 2.5 Flash · Ups
 
 ## Screenshots
 
-`[homepage hero]`
-
-`[roast result with populated scores]`
+![Homepage](./public/readme/readme-home.webp)
+![Roast result](./public/readme/readme-result.webp)
 
 ## Architecture notes
 
