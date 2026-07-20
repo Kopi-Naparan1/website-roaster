@@ -52,8 +52,8 @@ Requires API keys for Gemini and Upstash Redis (see `.env.example`).
 
 ## Contact
 
-Built by Nyro — [reach out](mailto:kopinaparan13@gmail.com) if you want to talk through any of the above.
+Built by Kopi Naparan — [reach out](mailto:kopinaparan13@gmail.com) if you want to talk through any of the above.
 
 ---
 
-© 2026 Nyro. All rights reserved. This code is provided for viewing/portfolio purposes only — no license is granted for reuse, modification, or distribution.
+© 2026 Kopi Naparan. All rights reserved. This code is provided for viewing/portfolio purposes only — no license is granted for reuse, modification, or distribution.
