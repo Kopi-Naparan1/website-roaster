@@ -15,7 +15,7 @@ Vex analyzes any public website and returns a brutally honest, structured critiq
 - **SSRF-hardened fetching** — multi-layer URL validation (`validateUrl.ts`, `assertSafeUrl.server.ts`) with pinned-IP requests via `undici`, blocking DNS rebinding and obfuscated-IP bypasses (octal/hex/decimal IPv4, IPv6 bracket edge cases). Deliberately avoided the popular `private-ip` npm package after finding it has an unpatched SSRF CVE (GHSA-9h3q-32c7-r533).
 - **Deterministic fact extraction before grading** — page facts are computed in code, not inferred by the model, which cuts hallucination and keeps scores reproducible. Gemini is used for judgment, not arithmetic.
 - **Site-purpose classification** — an established SaaS product isn't graded against startup-landing-page conventions; the model classifies intent before scoring.
-- **Caching with correctness in mind** — 24h Redis cache keyed by hostname+pathname, versioned (`roast:v2:...`) so cache entries invalidate cleanly whenever scoring logic changes, instead of serving stale results under a new rubric.
+- **Caching with correctness in mind** — 24h Redis cache keyed by hostname+pathname.
 - **Rate limiting + abuse resistance** — sliding-window limits via Upstash, layered on top of the SSRF protections above.
 
 ## Stack
