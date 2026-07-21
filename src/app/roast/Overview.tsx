@@ -4,7 +4,6 @@ import Image from "next/image";
 import SectionLayout from "@/components/ui/Section";
 import { RoastDataType } from "./RoastBreakDown";
 import VexOverview from "../../../public/vex/vex-overview.webp";
- 
 
 interface OverviewProps {
   roast: RoastDataType;
@@ -81,7 +80,7 @@ export default function Overview({
           <div className="flex flex-col justify-center items-center">
             <button
               onClick={OverallScrollToCategory}
-              className="rounded-full py-4 px-6 md:py-6 lg:py-8 md:px-8 shadow-sm hover:shadow-md hover:scale-105 ease-in-out transition-all duration-75 cursor-pointer bg-foreground/80 text-background font-semibold text-6xl md:text-5xl lg:text-6xl"
+              className="rounded-full py-4 px-6 md:py-6 lg:py-8 md:px-8 shadow-sm hover:shadow-md hover:scale-105 text-foreg ease-in-out transition-all duration-75 cursor-pointer dark:text-foreground bg-brand-700 dark:bg-brand-600 text-background font-semibold text-6xl md:text-5xl lg:text-6xl"
             >
               {overviewScore}
             </button>

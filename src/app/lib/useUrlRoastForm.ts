@@ -10,6 +10,12 @@ function calculateProgress(elapsedSeconds: number): number {
   const speed = 0.25;
   return target * (1 - Math.exp(-speed * elapsedSeconds));
 }
+const STAGE_MESSAGES = [
+  { after: 0, text: "Pulling up your site..." },
+  { after: 2, text: "Reading your copy so you don't have to." },
+  { after: 5, text: "Judging your CTAs. Harshly." },
+  { after: 9, text: "Still roasting — bigger sites take a beat." },
+];
 
 export function useUrlRoastForm() {
   const [url, setUrl] = useState("");
@@ -23,9 +29,16 @@ export function useUrlRoastForm() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const cancelledRef = useRef(false);
   const router = useRouter();
+  const [stageMessage, setStageMessage] = useState(STAGE_MESSAGES[0].text);
   const { addRoast } = useRecentRoasts();
   const isDisabled = loading || url.trim().length === 0 || !!urlError;
 
+  function getStageMessage(elapsed: number): string {
+    return (
+      STAGE_MESSAGES.filter((s) => elapsed >= s.after).at(-1)?.text ??
+      STAGE_MESSAGES[0].text
+    );
+  }
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -62,6 +75,7 @@ export function useUrlRoastForm() {
     setUrlError("");
     setGoodUrlIndicator("");
     setServerError(null);
+    setStageMessage(STAGE_MESSAGES[0].text);
   }
 
   function handleBackToHome() {
@@ -87,6 +101,7 @@ export function useUrlRoastForm() {
       const elapsed = (Date.now() - startTime) / 1000;
       setElapsedSeconds(Math.floor(elapsed));
       setProgress(calculateProgress(elapsed));
+      setStageMessage(getStageMessage(elapsed));
     }, 100);
 
     try {
@@ -112,6 +127,8 @@ export function useUrlRoastForm() {
       addRoast(url);
       if (intervalRef.current) clearInterval(intervalRef.current);
       setProgress(100);
+
+      setStageMessage("Done. Taking you to your roast..."); // fills the dead gap
 
       await new Promise((resolve) => setTimeout(resolve, 350));
       if (cancelledRef.current) return;
@@ -144,5 +161,6 @@ export function useUrlRoastForm() {
     handleRoast,
     handleCancel,
     handleBackToHome,
+    stageMessage,
   };
 }

@@ -45,7 +45,7 @@ export default function Heading() {
 
   return (
     <div
-      className={`mobileHeadingLayout md:desktopHeadingLayout fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-opacity duration-200 ease-in-out dark:bg-brand-700 bg-brand-100 ${scrolled ? "md:opacity-60" : "md:opacity-100"}`}
+      className={`mobileHeadingLayout md:desktopHeadingLayout fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-opacity min-h-[5vh] duration-200 ease-in-out dark:bg-brand-700 bg-brand-100 ${scrolled ? "md:opacity-60" : "md:opacity-100"}`}
     >
       <Link
         href={"/"}

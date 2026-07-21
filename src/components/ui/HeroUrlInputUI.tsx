@@ -14,6 +14,7 @@ interface HeroUrlInputUI {
   loading: boolean;
   progress: number;
   elapsedSeconds: number;
+  stageMessage: string;
   handleRoast: () => void;
   isDisabled: boolean;
   handleCancel: () => void;
@@ -29,7 +30,7 @@ export function HeroUrlInputUI({
   handleChange,
   loading,
   progress,
-  elapsedSeconds,
+  stageMessage,
   handleRoast,
   isDisabled,
   handleCancel,
@@ -74,7 +75,7 @@ export function HeroUrlInputUI({
             <input
               value={url}
               onChange={(e) => handleChange(e.target.value)}
-              placeholder="Input the URL of the site"
+              placeholder="https://yoursite.com"
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleRoast();
               }}
@@ -162,7 +163,7 @@ export function HeroUrlInputUI({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-xs text-foreground/60 mt-1">{elapsedSeconds}s</p>
+            <p className="text-xs text-foreground/60 mt-1">{stageMessage}</p>
           </div>
         </div>
       </div>
