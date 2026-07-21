@@ -237,6 +237,8 @@ export async function POST(request: Request) {
     { ex: 60 * 60 * 24 * 180 },
   );
 
+  await redis.sadd("all-share-ids", shareId);
+
   return Response.json({
     roast,
     cached: false,

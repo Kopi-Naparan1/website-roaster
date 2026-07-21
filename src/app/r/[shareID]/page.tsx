@@ -8,6 +8,7 @@ import ReRoast from "@/app/roast/ReRoast";
 import { AllSectionData, AllSectionDataInterface } from "@/data/AllSections";
 import { SharedSectionOverrides } from "@/data/SharedSectionOverrides";
 import type { Metadata } from "next";
+import { cache } from "react";
 
 interface Section {
   sectionID: string;
@@ -36,9 +37,9 @@ type RoastRecord = {
   createdAt: number;
 };
 
-async function getRecord(shareID: string) {
+const getRecord = cache(async (shareID: string) => {
   return redis.get<RoastRecord>(`roast:${shareID}`);
-}
+});
 
 export async function generateMetadata({
   params,
@@ -49,15 +50,16 @@ export async function generateMetadata({
   const record = await getRecord(shareID);
   if (!record) return { title: "Roast expired — Website Roaster" };
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "website-roaster-weld.vercel.app";
-  const ogUrl = `${baseUrl}/api/og?id=${shareID}`;
+  const ogUrl = `/api/og?id=${shareID}`;
   const title = `${record.domain} scored ${record.roast.overall.score}/10 — Vex: Website Roaster`;
   const description = `Vex roasted ${record.domain} and gave it a ${record.roast.overall.score}/10. See the full breakdown.`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: `/r/${shareID}`,
+    },
     openGraph: {
       title,
       description,
@@ -88,8 +90,32 @@ export default async function SharedRoastPage({
   const { roast, url } = record;
   const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: {
+      "@type": "WebSite",
+      name: record.domain,
+      url: record.url,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: roast.overall.score,
+      bestRating: 10,
+      worstRating: 0,
+    },
+    author: {
+      "@type": "Organization",
+      name: "Vex",
+    },
+  };
+
   return (
     <div className="flex flex-col flex-1 gap-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {sections.map(({ sectionID, Component }) => {
         const base = AllSectionData.find((i) => i.sectionType === sectionID);
         if (!base) return null;
