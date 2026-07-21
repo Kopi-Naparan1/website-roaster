@@ -33,6 +33,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="Flp1Jy15LvS3B/05BAFARw"
+          strategy="afterInteractive"
+        />
+        <Script
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
