@@ -297,6 +297,7 @@ export default function QuestionsYouMightAsk({
             </button>
           ))}
           <button
+            aria-label="close category panel"
             onClick={() => setIsPanelOpen(false)}
             className="md:hidden block md:pointer-events-none  absolute right-1 top-1  rounded-full border border-foreground/50 p-0.5 opacity-80"
           >

@@ -127,7 +127,10 @@ function SelectingChapters({
       value={String(currentIndex)}
       onValueChange={(v) => setCurrentIndex(Number(v))}
     >
-      <Select.Trigger className="border rounded px-2 py-1 text-xs lg:text-md flex items-center gap-1 hover:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600">
+      <Select.Trigger
+        aria-label="choose chapter"
+        className="border rounded px-2 py-1 text-xs lg:text-md flex items-center gap-1 hover:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600"
+      >
         <Select.Value />
         <Select.Icon>
           <ChevronDown size={14} />
