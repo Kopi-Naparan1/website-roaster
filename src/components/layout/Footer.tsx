@@ -77,6 +77,7 @@ export default function Footer() {
         </div>
         <button
           type="button"
+          aria-label="Light mode and Dark mode toggle"
           onClick={toggleTheme}
           className="text-xs px-1 mt-4 py-0.5 flex dark:hover:text-background justify-center items-center text-foreground border border-brand-400 rounded-sm cursor-pointer hover:bg-brand-200 duration-75 ease-in-out transition-colors"
         >

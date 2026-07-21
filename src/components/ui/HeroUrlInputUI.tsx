@@ -87,7 +87,7 @@ export function HeroUrlInputUI({
                 type="button"
                 onClick={() => handleChange("")}
               >
-                <X size={20}></X>
+                <X aria-label="Delete url" size={20}></X>
               </button>
 
               {showArchive && (
@@ -131,6 +131,7 @@ export function HeroUrlInputUI({
                       </ul>
                       <button
                         type="button"
+                        aria-label="Delete all archive roasts"
                         className="flex gap-2 cursor-pointer flex-row w-full text-left p-2 text-xs text-red-400/80  hover:text-red-500 duration-75 ease-in-out transition-colors hover:bg-red-200 border-t border-foreground/10"
                         onClick={clearRoasts}
                       >
@@ -144,6 +145,7 @@ export function HeroUrlInputUI({
               <button
                 className="cursor-pointer hover:text-foreground duration-75 ease-in-out transition-opacity"
                 type="button"
+                aria-label="Archive Roasts"
                 onClick={() => setShowArchive((prev) => !prev)}
               >
                 <Archive size={20}></Archive>
