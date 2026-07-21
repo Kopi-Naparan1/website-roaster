@@ -36,9 +36,6 @@ export const metadata: Metadata = {
     description:
       "Paste your URL. Get roasted. AI scores your site on Clarity, Copy, CTA, Trust, and Mobile — no sugarcoating.",
   },
-  verification: {
-    google: "google8640130866272d5e.html",
-  },
 };
 
 export default function RootLayout({
