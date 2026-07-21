@@ -83,7 +83,7 @@ export function HeroUrlInputUI({
 
             <div className="absolute flex flex-row gap-2 right-3 top-1/2 -translate-y-1/2 text-foreground/60 z-20">
               <button
-                className="cursor-pointer duration-75 ease-in-out transition-opacity hover:text-foreground focus-ring"
+                className="cursor-pointer duration-75 ease-in-out transition-opacity hover:text-foreground focus-ring min-w-6 min-h-6"
                 type="button"
                 onClick={() => handleChange("")}
               >
@@ -132,7 +132,7 @@ export function HeroUrlInputUI({
                       <button
                         type="button"
                         aria-label="Delete all archive roasts"
-                        className="flex gap-2 cursor-pointer flex-row w-full text-left p-2 text-xs text-red-400/80  hover:text-red-500 duration-75 ease-in-out transition-colors hover:bg-red-200 border-t border-foreground/10"
+                        className="min-w-6 min-h-6 flex gap-2 cursor-pointer flex-row w-full text-left p-2 text-xs text-red-400/80  hover:text-red-500 duration-75 ease-in-out transition-colors hover:bg-red-200 border-t border-foreground/10"
                         onClick={clearRoasts}
                       >
                         <Trash2 size={12}></Trash2>
@@ -148,7 +148,7 @@ export function HeroUrlInputUI({
                 aria-label="Archive Roasts"
                 onClick={() => setShowArchive((prev) => !prev)}
               >
-                <Archive size={20}></Archive>
+                <Archive className="min-w-6 min-h-6" size={20}></Archive>
               </button>
             </div>
           </div>

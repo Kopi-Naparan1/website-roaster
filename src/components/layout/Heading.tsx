@@ -52,7 +52,7 @@ export default function Heading() {
         className=" hover:opacity-70 duration-75 ease-in-out transition-opacity cursor-pointer  py-1 flex flex-row justify-center items-center "
       >
         <div className="relative w-8 h-8 md:w-8 md:h-6 lg:w-10 lg:h-9">
-          <Image height={36} width={40} alt="Vex Logo Image" src={Logo}></Image>
+          <Image height={34} width={38} alt="Vex Logo Image" src={Logo}></Image>
         </div>
         <span className="tracking-tight md:text-xs font-bold flex ">Vex</span>
       </Link>

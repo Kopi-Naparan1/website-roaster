@@ -64,6 +64,7 @@ function ButtonChooser({
     return (
       <button
         type="button"
+        aria-label="previous chapter"
         className={`dark:text-background/80 dark:bg-brand-300 flex justify-center items-center hover:bg-brand-200   lg:text-sm font-sans leading-none tracking-wide cursor-pointer font-medium text-xs md:text-sm   border border-foreground/50 px-2 py-1 bg-brand-50 rounded-sm  duration-75 ease-in-out transition-colors  ${buttonClassName}`}
         onClick={onClick}
         disabled={disabled}
@@ -74,6 +75,7 @@ function ButtonChooser({
   } else if (variant === "next") {
     return (
       <button
+        aria-label="next chapter"
         type="button"
         className={`dark:text-background/80 dark:bg-brand-300 flex justify-center items-center lg:text-sm px-2 py-1 rounded-sm hover:bg-brand-200 duration-75 ease-in-out transition-colors font-sans border bg-brand-100 leading-none tracking-wide cursor-pointer font-medium text-xs md:text-sm ${buttonClassName}`}
         onClick={onClick}
