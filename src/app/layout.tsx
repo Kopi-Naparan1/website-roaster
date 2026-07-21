@@ -32,15 +32,22 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}   h-full antialiased custom-scroll`}
     >
       <body className="min-h-full flex flex-col">
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-        try {
-          const t = localStorage.getItem('theme');
-          const dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.classList.toggle('dark', dark);
-        } catch (_) {}
-      `}
-        </Script>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+    try {
+      const t = localStorage.getItem('theme');
+      const dark = t
+        ? t === 'dark'
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      document.documentElement.classList.toggle('dark', dark);
+    } catch {}
+  `,
+          }}
+        />
         <Heading></Heading>
         {children}
         <Footer></Footer>

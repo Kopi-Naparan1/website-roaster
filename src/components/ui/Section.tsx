@@ -39,9 +39,8 @@ function handleHeroSections(
           <Image
             src={VexHeroDecorative}
             alt=""
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-            width={64}
-            height={64}
+            width={80}
+            height={80}
             className="inline-block align-middle w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 xl:w-20 xl:h-20 mb-5 "
           />
         )}
