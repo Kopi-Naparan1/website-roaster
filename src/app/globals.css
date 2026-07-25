@@ -171,27 +171,6 @@ html {
   --muted-foreground: #9a9ca3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121316; /* soft near-black with a hint of blue, not pure black */
-    --foreground: #e4e4e7; /* slightly off-white, not stark white — easier on eyes */
-    --card: #1c1e22; /* clearly lighter than background — real separation/elevation */
-    --card-foreground: #e4e4e7;
-    --border: #2e3136; /* visible but soft */
-    --input: #2e3136;
-    --ring: #5fa0b8;
-    --background-alt: #1a1c20;
-
-    --primary: #5fa0b8;
-    --primary-foreground: #0a0a0a; /* dark text on light-ish primary reads better than white-on-light-blue */
-    --secondary: #2a2c30;
-    --secondary-foreground: #e4e4e7;
-    --accent: var(--brand-900);
-    --accent-foreground: var(--brand-200);
-    --muted: #202226;
-    --muted-foreground: #9a9ca3;
-  }
-}
 @utility desktopLayout {
   width: 100%;
   padding-inline: 80px;

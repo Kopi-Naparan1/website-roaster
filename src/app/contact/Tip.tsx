@@ -85,10 +85,10 @@ export default function Tip() {
 
         <div
           onClick={() => setIsHovered((prev) => !prev)}
-          className="relative flex justify-center items-center w-40 h-40 border rounded-sm  "
+          className="relative cursor-pointer flex justify-center items-center w-40 h-40 border rounded-sm  "
         >
           <p className="text-xs opacity-20 max-w-[90%]">
-            Click or Hover to view Gcash QR code
+            Click to view Gcash QR code
           </p>
           {isHovered && (
             <Image
